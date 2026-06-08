@@ -33,23 +33,32 @@ produtos = {
     }
 }
 
-vendas = {
-    #ID da compra
+vendas = { # Aqui nesse dicionário eu coloquei um ID para cada venda, 
+            #que recebe uma lista no qual tem o CPF, data da venda, 
+            #um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, e por ultimo o valor total da venda
+    
     "11111": ['123',
             '11/11/2011',  
             {
-                "123456": '3',
-                "234567": '2'
+                "123": '3',
+                "234": '2'
             },
             '1000.00'],
 
     "22222": ['234',
             '11/11/2011',  
             {
-                "123456": '3',
-                "234567": '4'
+                "123": '3',
+                "234": '4'
             },
-            '1500.00']
+            '1500.00'],
+    "33333": ['345',
+              '12/11/2011',
+              {
+                  "234": '6',
+                  "345": '9'
+              },
+              '2000.00']
 
 }
 
@@ -69,9 +78,10 @@ while modulo != "0":
     print("\\\ 0- Sair🔙                 //")
     print("  ---------------------------")
     modulo = input("Informe o módulo que deseja acessar: ").strip()
-    while not(modulo in "123450"):
+    modulos_validos = ["0", "1", "2", "3", "4", "5"]
+    while not(modulo in modulos_validos):
         modulo = input("Informe uma opção válida: ").strip()
-    if modulo == "1":
+    while modulo == "1":
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\033[1;31;45m--------------------------------\033[m")
         print("\033[1;31;45m|      MÓDULO DE CLIENTES      |\033[m")
@@ -83,7 +93,8 @@ while modulo != "0":
         print("\\\ 0- Voltar🔙                //")
         print("  ----------------------------")
         resp1 = input("Informe a opção que deseja: ").strip()
-        while not(resp1 in "12340"):
+        resp1_validas = ["0", "1", "2", "3", "4"]
+        while not(resp1 in resp1_validas):
             resp1 = input("Informe uma opção válida: ").strip()
         if resp1 == "1":
             os.system('cls' if os.name == 'nt' else 'clear')
@@ -176,20 +187,26 @@ while modulo != "0":
                 print("Cliente não encontrado!")
                 print()
             input('APERTE ENTER PARA PROSSEGUIR')
+        else:
+            break
 
-    elif modulo == "2":
+    while modulo == "2":
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\033[1;31;45m--------------------------------\033[m")
         print("\033[1;31;45m|      MÓDULO DE PRODUTOS      |\033[m")
         print("\033[1;31;45m--------------------------------\033[m")
         print("|| 1- Roupas👗                ||")
         print("|| 2- Cosméticos💄            ||")
-        print("\\\ 3- Acessórios👓            //")
+        print("|| 3- Acessórios👓            ||")
+        print("\\\ 0- Voltar 🔙             //")
         print("  ----------------------------")
         resp2 = input("Informe a opção que deseja: ").strip()
-        while not(resp2 in "123"):
+        resp2_validas = ["0", "1", "2", "3"]
+        while not(resp2 in resp2_validas):
             resp2 = input("Informe uma opção válida: ").strip()
-        if resp2 == "1":
+        if resp2 == "0":
+            break
+        while resp2 == "1":
             os.system('cls' if os.name == 'nt' else 'clear')
             print("\033[1;31;45m------------------------------------\033[m")
             print("\033[1;31;45m|         ROUPAS FEMININA          |\033[m")
@@ -201,7 +218,8 @@ while modulo != "0":
             print("\\\ 0- Voltar🔙                    //")
             print("   ------------------------------")
             resp3 = input("Informe a opção que deseja: ").strip()
-            while not(resp3 in "12340"):
+            resp3_validas = ["0", "1", "2", "3", "4"]
+            while not(resp3 in resp3_validas):
                 resp3 = input("Informe uma opção válida: ").strip()
             if resp3 == "1":
                 os.system('cls' if os.name == 'nt' else 'clear')
@@ -267,7 +285,7 @@ while modulo != "0":
                     print("--------------------------------")
                     print(produtos["roupas"]) #Vericação
                 else:
-                    print("Esse produto não esta cadastrado!")
+                    print("Esse produto não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             elif resp3 == "4":
@@ -294,10 +312,13 @@ while modulo != "0":
                     else:
                         print("Exclusão cancelada!")
                 else:
-                    print("Esse produto não eestá cadastrado!")
+                    print("Esse produto não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
-        elif resp2 == "2":
+            else:
+                break
+        while resp2 == "2":
+            os.system('cls' if os.name == 'nt' else 'clear')
             print("\033[1;31;45m-----------------------------------\033[m")
             print("\033[1;31;45m|       COSMÉTICOS FEMININOS      |\033[m")
             print("\033[1;31;45m-----------------------------------\033[m")
@@ -308,7 +329,8 @@ while modulo != "0":
             print("\\\ 0- Voltar🔙                   // ")
             print("  -------------------------------")
             resp4 = input('Informe a opção que deseja: ').strip()
-            while not(resp4 in "12340"):
+            resp4_validas = ["0", "1", "2", "3", "4"]
+            while not(resp4 in resp4_validas):
                 resp4 = input("Informe uma opção válida: ").strip()
             if resp4 == "1":
                 os.system('cls' if os.name == 'nt' else 'clear')
@@ -316,7 +338,7 @@ while modulo != "0":
                 print("\033[1;31;45m|     CADASTRAR COSMÉTICOS     |\033[m")
                 print("\033[1;31;45m--------------------------------\033[m")
                 print()
-                codigo = input("Informe o código do cosméstico: ").strip()
+                codigo = input("Informe o código do cosmético: ").strip()
                 if not(codigo in produtos["cosmeticos"]):
                     tipo_cosmetico = input("Informe o tipo do cosmético: ").strip()
                     preco = input("Informe o valor do cosmético: R$").strip()
@@ -359,7 +381,7 @@ while modulo != "0":
                     print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                     print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                     print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                    tipo_cosmetico = input("Informe o TIPO atualizado da cosmético: ").strip()
+                    tipo_cosmetico = input("Informe o TIPO atualizado do cosmético: ").strip()
                     preco = input("Informe o novo VALOR para o cosmético: R$").strip()
                     produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
                     print()
@@ -383,7 +405,7 @@ while modulo != "0":
                     print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                     print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                     print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                    excluir = input("Digite S para confirmar a excluão: ").strip().upper()
+                    excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
                     print()
                     if excluir == "S":
                         del produtos["cosmeticos"][codigo]
@@ -398,9 +420,12 @@ while modulo != "0":
                     print("Não existe cosmético cadastrado com esse código!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
-        elif resp2 == "3":
+            else:
+                break
+        while resp2 == "3":
+            os.system('cls' if os.name == 'nt' else 'clear')
             print("\033[1;31;45m-----------------------------------\033[m")
-            print("\033[1;31;45m|       ACESSÓRIOOS FEMININOS     |\033[m")
+            print("\033[1;31;45m|       ACESSÓRIOS FEMININOS      |\033[m")
             print("\033[1;31;45m-----------------------------------\033[m")
             print("|| 1- Cadastrar acessório✅      ||")
             print("|| 2- Dados do acessórioℹ️        ||")
@@ -409,7 +434,8 @@ while modulo != "0":
             print("\\\ 0- Voltar🔙                   //")
             print("  ------------------------------")
             resp5 = input('Informe a opção que deseja: ').strip()
-            while not(resp5 in "12340"):
+            resp5_validas = ["0", "1", "2", "3", "4"]
+            while not(resp5 in resp5_validas):
                 resp5 = input("Informe uma opção válida: ").strip()
             if resp5 == "1":
                 os.system('cls' if os.name == 'nt' else 'clear')
@@ -461,7 +487,7 @@ while modulo != "0":
                     print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                     print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
                     print()
-                    tipo_acessorio = input("Informe o tipo atualizado da acessório: ").strip()
+                    tipo_acessorio = input("Informe o tipo atualizado do acessório: ").strip()
                     preco = input("Informe o novo valor para o acessório: R$").strip()
                     produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
                     print()
@@ -502,19 +528,22 @@ while modulo != "0":
                     print("Esse código não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
-    elif modulo == "3":
+            else:
+                break
+    while modulo == "3":
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\033[1;31;45m-----------------------------------\033[m")
         print("\033[1;31;45m|          MÓDULO DE VENDAS       |\033[m")
         print("\033[1;31;45m-----------------------------------\033[m")
-        print("|| 1- Adionar venda✅            ||")
-        print("|| 2- Vizualizar vendasℹ️         ||")
+        print("|| 1- Adicionar venda✅          ||")
+        print("|| 2- Visualizar vendasℹ️         ||")
         print("|| 3- Editar venda🔁             ||")
         print("|| 4- Excluir uma venda🗑️         ||")
         print("\\\ 0- Voltar🔙                   //")
         print("  --------------------------------")
         resp6 = input("Informe a opção desejada: ").strip()
-        while not(resp6 in "12340"):
+        resp6_validas = ["0", "1", "2", "3", "4"]
+        while not(resp6 in resp6_validas):
                 resp6 = input("Informe uma opção válida: ").strip()
         if resp6 == "1":
             print("\033[1;31;45m--------------------------------\033[m")
@@ -540,15 +569,17 @@ while modulo != "0":
                 print("--------------------------------")
                 print("|       VENDA CADASTRADA✅    |")
                 print("--------------------------------")
+                print()
+                print(vendas) #Verificação
             else:
                 print("Esse ID já está cadastrado!")
             print()
             input('APERTE ENTER PARA PROSSEGUIR')
         elif resp6 == "2":
             print("\033[1;31;45m--------------------------------\033[m")
-            print("\033[1;31;45m|      VIZUALIZAR VENDAS       |\033[m")
+            print("\033[1;31;45m|      VISUALIZAR VENDAS       |\033[m")
             print("\033[1;31;45m--------------------------------\033[m")
-            id_venda = input("Informe o ID da venda que deseja vizualizar: ").strip()
+            id_venda = input("Informe o ID da venda que deseja visualizar: ").strip()
             if id_venda in vendas:
                 print()
                 print(f"CPF: {vendas[id_venda][0]}")
@@ -594,6 +625,8 @@ while modulo != "0":
                 print("--------------------------------")
                 print("|        VENDA EDITADA✅      |")
                 print("--------------------------------")
+                print()
+                print(vendas) #Verificação
             else:
                 print("Esse ID não está cadastrado!")
             print()
@@ -619,14 +652,18 @@ while modulo != "0":
                     print()
                     print("--------------------------------")
                     print("|        VENDA EXCLUÍDA✅      |")
-                    print("--------------------------------")  
+                    print("--------------------------------") 
+                    print()
+                    print(vendas) #verificação
                 else:
                     print("Exclusão cancelada!") 
             else:
                 print("Essa venda não está cadastrada!")
             print()
-            input('APERTE ENTER PARA PROSSEGUIR')        
-    elif modulo == "4":
+            input('APERTE ENTER PARA PROSSEGUIR') 
+        else:
+            break       
+    while modulo == "4":
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\033[1;31;45m-----------------------------------\033[m")
         print("\033[1;31;45m|        MÓDULO DE RELATÓRIOS     |\033[m")
@@ -639,16 +676,20 @@ while modulo != "0":
         print("\\\ 0- Voltar                    //")
         print("  -------------------------------")
         resp7 = input("Informe a opção desejada: ").strip()
-        while not(resp7 in "123450"):
+        resp7_validas = ["0", "1", "2", "3", "4", "5"]
+        while not(resp7 in resp7_validas):
             resp7 = input("Informe uma opção válida: ").strip()
-        if resp7 != "0":
+        if resp7 == "0":
+            break
+        else:
             print()
             print("\033[1;31;45m-----------------------------------\033[m")
             print("\033[1;31;45m|    FUNÇÃO EM DESENVOLVIMENTO⚠️   |\033[m")
             print("\033[1;31;45m-----------------------------------\033[m")
             print()
             input('APERTE ENTER PARA PROSSEGUIR')
-    elif modulo == "5":
+
+    if modulo == "5":
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\033[1;31;45m-------------------------------------------\033[m")
         print("\033[1;31;45m|               SOBRE O SISTEMA           |\033[m")
