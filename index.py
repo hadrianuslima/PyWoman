@@ -1,4 +1,5 @@
 import os
+import pickle
 #ESSAS FUNÇÕES ESTÃO AQUI PQ EU USO EM MUITAS PARTES DO CÓDIGO
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -32,14 +33,18 @@ def verificar_preco(valor):
             loop = False
         except ValueError:
                 valor = input("INFORME O VALOR DE FORMA CORRETA: R$").strip()
+def validar_cpf(cpf):
+    while not (cpf.isdigit() and (len(cpf) == 11)):
+        cpf = input("Informe o CPF de forma correta (SOMENTE 11 NÚMEROS): ").strip()
+    return cpf
 
         
 clientes = {
           #[nome, telefone, cpf, data de nascimento]
-    "123": ['Hadrianus', "9999999999", '123', '12/09/2006'],
-    "234": ['Valeria', '8888888888', '234', '04/11/2005'],
-    "345": ['Marycele', '7777777777', '345', '24/10/1982'],
-    "456": ['Roberto', '6666666666', '456', '13/11/1982']
+    "123": ['Hadrianus da silva lima', "9999999999", '123', '12/09/2006'],
+    "234": ['Valeria pereira de medeiros', '8888888888', '234', '04/11/2005'],
+    "345": ['Marycele saraiva da silva', '7777777777', '345', '24/10/1982'],
+    "456": ['Roberto alves de lima', '6666666666', '456', '13/11/1982']
 
 }
 
@@ -48,7 +53,8 @@ produtos = {
                     "123": ['blusa', 'M', '123', 'preto', '50.00'],
                     "234": ['vestido', 'P', '234', 'azul', '70.00'],
                     "345": ['calça', 'G', '345', 'vermelho',  '40.00'],
-                    "456": ['sutiã', 'M', '456', 'preto', '30.00']
+                    "456": ['sutiã', 'M', '456', 'preto', '30.00'],
+                    "567": ["blusa croped", 'P', '567', 'azul', 10.99]
     },
     "cosmeticos" : {
 
@@ -71,7 +77,8 @@ vendas = { # Aqui nesse dicionário eu coloquei um ID para cada venda,
             #que recebe uma lista no qual tem o CPF, data da venda, 
             #um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, e por ultimo o valor total da venda
     
-    "11111": ['123',
+    "11111": ['Hadrianus da silva lima',
+            '123',
             '11/11/2011',  
             {
                 "123": '3',
@@ -79,14 +86,16 @@ vendas = { # Aqui nesse dicionário eu coloquei um ID para cada venda,
             },
             '1000.00'],
 
-    "22222": ['234',
+    "22222": ['Valeria pereira de medeiros',
+            '234',
             '11/11/2011',  
             {
                 "123": '3',
                 "234": '4'
             },
             '1500.00'],
-    "33333": ['345',
+    "33333": ['Marycele saraiva da silva',
+              '345',
               '12/11/2011',
               {
                   "234": '6',
@@ -130,13 +139,10 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("CADASTRAR CLIENTE")
             print()
-            cpf = input("Informe o CPF do cliente (SOMENTE NÚMEROS): ").strip()
-            verificar_numeros(cpf)
+            cpf = validar_cpf(input("Informe o CPF do cliente (SOMENTE NÚMEROS): ").strip())
             if not(cpf in clientes):
-                nome = input("Informe o nome do cliente: ").strip().capitalize()
-                verificar_letras(nome)
-                fone = input("Informe o número do telefone do cliente: ").strip()
-                verificar_numeros(fone)
+                nome = verificar_letras(input("Informe o nome do cliente: ").strip().capitalize())
+                fone = verificar_numeros(input("Informe o número do telefone do cliente: ").strip())
                 data_nasc = input("Informe a data de nascimento do cliente no formato DD/MM/AAAA: ").strip()
                 clientes[cpf] = [nome,fone,cpf,data_nasc] #Add cliente no dicionário de clientes
                 print()
@@ -153,14 +159,18 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("DADOS DO CLIENTE")
             print()
-            cpf = input("CPF: ").strip()
-            verificar_numeros(cpf)
-            if cpf in clientes:
-                print(f"NOME: {clientes[cpf][0]}")
-                print(f"CPF: {clientes[cpf][2]}")
-                print(f"TELEFONE: {clientes[cpf][1]}")
-                print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
-            else:
+            busca = verificar_letras(input("NOME: ").strip().lower())
+            achou = ""
+            for i in clientes:
+                if busca in clientes[i][0].lower():
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CPF: {clientes[i][2]}")
+                    print(f"NOME: {clientes[i][0]}")
+                    print(f"TELEFONE: {clientes[i][1]}")
+                    print(f"DATA DE NASCIMENTO: {clientes[i][3]}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    achou = "S"
+            if achou != "S": #Usei como forma de informar se não há cliente relacionado a pesquisa
                 print("Cliente não encontrado!")
             print()
             input('APERTE ENTER PARA PROSSEGUIR')
@@ -168,52 +178,73 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("ATUALIZAR DADOS")
             print()
-            cpf = input("CPF: ").strip()
-            verificar_numeros(cpf)
-            if cpf in clientes:
-                print(f"NOME: {clientes[cpf][0]}")
-                print(f"TELEFONE: {clientes[cpf][1]}")
-                print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
-                nome = input("Informe o novo nome para o cliente: ").strip()
-                data_nasc = input("Informe a nova data de nascimento para cliente: ").strip()
-                fone = input("Informe o novo número telefone cliente: ").strip()
-                clientes[cpf][0] = nome
-                clientes[cpf][3] = data_nasc
-                clientes[cpf][1] = fone
-                print()
-                print("--------------------------------")
-                print("|      DADOS ATUALIZADOS✅     |")
-                print("--------------------------------")
-                print(clientes)  #Verificação
-            else:
+            busca = verificar_letras(input("NOME: ").strip().lower())
+            achou = ""
+            for i in clientes:
+                if busca in clientes[i][0].lower():
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CPF: {clientes[i][2]}")
+                    print(f"NOME: {clientes[i][0]}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    achou = "S"
+            if achou != "S": #Usei como forma de informar se não há cliente relacionado a pesquisa
                 print("Cliente não encontrado!")
+            else:
+                cpf = validar_cpf(input("Informe o CPF do cliente que deseja editar: ").strip())
+                if cpf in clientes:
+                    print(f"NOME: {clientes[cpf][0]}")
+                    print(f"TELEFONE: {clientes[cpf][1]}")
+                    print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
+                    nome = verificar_letras(input("Informe o novo nome para o cliente: ").strip().capitalize())
+                    data_nasc = input("Informe a nova data de nascimento para cliente: ").strip()
+                    fone = verificar_numeros(input("Informe o novo número telefone cliente: ").strip())
+                    clientes[cpf][0] = nome
+                    clientes[cpf][3] = data_nasc
+                    clientes[cpf][1] = fone
+                    print()
+                    print("--------------------------------")
+                    print("|      DADOS ATUALIZADOS✅     |")
+                    print("--------------------------------")
+                    print(clientes)  #Verificação
+                else:
+                    print("Esse CPF não está cadastrado!")
             print()
             input('APERTE ENTER PARA PROSSEGUIR')
         elif resp1 == "4":
             limpar_terminal()
             titulo_menu_menor("EXCLUIR CADASTRO")
             print()
-            cpf = input("CPF: ").strip()
-            verificar_numeros(cpf)
-            if cpf in clientes:
-                print(f"NOME: {clientes[cpf][0]}")
-                print(f"CPF: {clientes[cpf][2]}")
-                print(f"TELEFONE: {clientes[cpf][1]}")
-                print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
-                excluir = input("Digite S para excluir o cadastro: ").strip().upper()
-                if excluir == "S":
-                    del clientes[cpf]
-                    print("--------------------------------")
-                    print("|      CADASTRO EXCLUÍDO✅    |")
-                    print("--------------------------------")
-                    print()
-                    print(clientes) #Verificação
-                else:
-                    print("Exclusão cancelada!")
-                    print()
-            else:
+            busca = verificar_letras(input("NOME: ").strip().lower())
+            achou = ""
+            for i in clientes:
+                if busca in clientes[i][0].lower():
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CPF: {clientes[i][2]}")
+                    print(f"NOME: {clientes[i][0]}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    achou = "S"
+            if achou != "S":
                 print("Cliente não encontrado!")
-                print()
+            else:
+                cpf = validar_cpf(input("Informe o CPF do cliente que deseja excluir: ").strip())
+                if cpf in clientes:
+                    print(f"NOME: {clientes[cpf][0]}")
+                    print(f"CPF: {clientes[cpf][2]}")
+                    print(f"TELEFONE: {clientes[cpf][1]}")
+                    print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
+                    excluir = input("Digite S para excluir o cadastro: ").strip().upper()
+                    if excluir == "S":
+                        del clientes[cpf]
+                        print("--------------------------------")
+                        print("|       CADASTRO EXCLUÍDO✅    |")
+                        print("--------------------------------")
+                        print()
+                        print(clientes) #Verificação
+                    else:
+                        print("Exclusão cancelada!")
+                else:
+                    print("Esse CPF não está cadastrado!")
+            print()
             input('APERTE ENTER PARA PROSSEGUIR')
         else:
             break
@@ -270,15 +301,19 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("DADOS DA PEÇA")
                 print()
-                codigo = verificar_numeros(input("Informe o código da peça: ").strip())
-                print()
-                if codigo in produtos["roupas"]:
-                    print(f"TIPO: {produtos['roupas'][codigo][0]}")
-                    print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
-                    print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
-                    print(f"COR: {produtos['roupas'][codigo][3]}")
-                    print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
-                else:
+                busca = verificar_letras(input("QUAL ROUPA DESEJA BUSCAR: ").strip().lower())
+                achou = ''
+                for codigo in produtos["roupas"]:
+                    if busca in produtos["roupas"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
+                        print(f"PEÇA: {produtos['roupas'][codigo][0]}")
+                        print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
+                        print(f"COR: {produtos['roupas'][codigo][3]}")
+                        print(f"PREÇO: {produtos['roupas'][codigo][4]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
                     print("Essa peça não está cadastrada!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
@@ -286,49 +321,73 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("ATUALIZAR PEÇA")
                 print()
-                codigo = verificar_numeros(input("Informe o código da peça: ").strip())
-                if codigo in produtos["roupas"]:
-                    print(f"TIPO: {produtos['roupas'][codigo][0]}")
-                    print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
-                    print(f"COR: {produtos['roupas'][codigo][3]}")
-                    print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
-                    cor = verificar_numeros(input("Informe a COR atualizada da peça: ").strip())
-                    tipo_peça = verificar_letras(input("Informe o TIPO atualizado da peça: ").strip())  
-                    tamanho = verificar_letras(input("Informe o TAMANHO atualizado da peça: ").strip())
-                    preco = verificar_preco(input("Informe o novo VALOR da peça: R$").strip())
-                    produtos["roupas"][codigo] = [tipo_peça, tamanho, codigo, cor, preco]
-                    print()
-                    print("--------------------------------")
-                    print("|       PEÇA ATUALIZADA✅      |")
-                    print("--------------------------------")
-                    print(produtos["roupas"]) #Vericação
-                else:
+                busca = verificar_letras(input("QUAL ROUPA DESEJA ATUALIZAR: ").strip().lower())
+                achou = ""
+                for codigo in produtos["roupas"]:
+                    if busca in produtos["roupas"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
+                        print(f"PEÇA: {produtos['roupas'][codigo][0]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
                     print("Esse produto não está cadastrado!")
+                else:
+                    codigo = verificar_numeros(input("Informe o código da peça: ").strip())
+                    if codigo in produtos["roupas"]:
+                        print(f"TIPO: {produtos['roupas'][codigo][0]}")
+                        print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
+                        print(f"COR: {produtos['roupas'][codigo][3]}")
+                        print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
+                        cor = verificar_letras(input("Informe a COR atualizada da peça: ").strip())
+                        tipo_peça = verificar_letras(input("Informe o TIPO atualizado da peça: ").strip())  
+                        tamanho = verificar_letras(input("Informe o TAMANHO atualizado da peça: ").strip())
+                        preco = verificar_preco(input("Informe o novo VALOR da peça: R$").strip())
+                        produtos["roupas"][codigo] = [tipo_peça, tamanho, codigo, cor, preco]
+                        print()
+                        print("--------------------------------")
+                        print("|       PEÇA ATUALIZADA✅      |")
+                        print("--------------------------------")
+                        print(produtos["roupas"]) #Vericação
+                    else:
+                        print("Esse produto não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             elif resp3 == "4":
                 limpar_terminal()
                 titulo_menu_menor("EXCLUIR PEÇA")
                 print()
-                codigo = verificar_numeros(input("CÓDIGO DA PEÇA: ").strip())
-                if codigo in produtos["roupas"]:
-                    print(f"TIPO: {produtos['roupas'][codigo][0]}")
-                    print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
-                    print(f"COR: {produtos['roupas'][codigo][3]}")
-                    print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
-                    print()
-                    excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
-                    if excluir == "S":
-                        del produtos["roupas"][codigo]
-                        print("--------------------------------")
-                        print("|        PEÇA EXCLUÍDA✅        |")
-                        print("--------------------------------")
-                        print()
-                        print(produtos["roupas"]) #Verificação
-                    else:
-                        print("Exclusão cancelada!")
+                busca = verificar_letras(input("Busque pela peça de deseja excluir: ").strip().lower())
+                achou = ""
+                for codigo in produtos["roupas"]:
+                    if busca in produtos["roupas"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
+                        print(f"PEÇA: {produtos['roupas'][codigo][0]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Nenhum produto encontrado!")
                 else:
-                    print("Esse produto não está cadastrado!")
+                    codigo = verificar_numeros(input("Informe o código da peça: ").strip())
+                    if codigo in produtos["roupas"]:
+                        print(f"TIPO: {produtos['roupas'][codigo][0]}")
+                        print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
+                        print(f"COR: {produtos['roupas'][codigo][3]}")
+                        print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
+                        print()
+                        excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
+                        if excluir == "S":
+                            del produtos["roupas"][codigo]
+                            print("--------------------------------")
+                            print("|        PEÇA EXCLUÍDA✅        |")
+                            print("--------------------------------")
+                            print()
+                            print(produtos["roupas"]) #Verificação
+                        else:
+                            print("Exclusão cancelada!")
+                    else:
+                        print("Esse produto não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             else:
@@ -369,61 +428,91 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("DADOS DO COMÉSTICO")
                 print()
-                codigo =verificar_numeros(input("Informe o código do cosmético: ").strip())
-                print()
-                if codigo in produtos["cosmeticos"]:
-                    print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
-                    print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
-                    print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                else:
-                    print("Esse cosmético não está cadastrado!")
+                busca = verificar_letras(input("Busque pela peça: ").strip().lower())
+                achou = ""
+                for codigo in produtos["cosmeticos"]:
+                    if busca in produtos["cosmeticos"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
+                        print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
+                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Produto não encontrado!")
                 print()    
                 input('APERTE ENTER PARA PROSSEGUIR')
             elif resp4 == "3":
                 limpar_terminal()
                 titulo_menu_menor("EDITAR DADOS")
                 print()
-                codigo = verificar_numeros(input("Informe o código do cosmético: ").strip())
-                print()
-                if codigo in produtos["cosmeticos"]:
-                    print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
-                    print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
-                    print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                    tipo_cosmetico = verificar_letras(input("Informe o TIPO atualizado do cosmético: ").strip())
-                    preco = verificar_preco(input("Informe o novo VALOR para o cosmético: R$").strip())
-                    produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
-                    print()
-                    print("--------------------------------")
-                    print("|       DADOS ATUALIZADOS✅    |")
-                    print("--------------------------------")
-                    print()
-                    print(produtos["cosmeticos"]) #Verificação
+                busca = verificar_letras(input("Busque pelo produto que deseja editar: ").strip().lower())
+                achou = ""
+                for codigo in produtos["cosmeticos"]:
+                    if busca in produtos["cosmeticos"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
+                        print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
+                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Produto não encontrado!")
                 else:
-                    print("Não existe produto cadastrado com esse código!")
+                    codigo = verificar_numeros(input("Informe o código do cosmético: ").strip())
+                    print()
+                    if codigo in produtos["cosmeticos"]:
+                        print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
+                        print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
+                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        tipo_cosmetico = verificar_letras(input("Informe o TIPO atualizado do cosmético: ").strip())
+                        preco = verificar_preco(input("Informe o novo VALOR para o cosmético: R$").strip())
+                        produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
+                        print()
+                        print("--------------------------------")
+                        print("|       DADOS ATUALIZADOS✅    |")
+                        print("--------------------------------")
+                        print()
+                        print(produtos["cosmeticos"]) #Verificação
+                    else:
+                        print("Não existe produto cadastrado com esse código!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             elif resp4 == "4":
                 limpar_terminal()
                 titulo_menu_menor("EXCLUIR COSMÉTICO")
                 print()
-                codigo = verificar_numeros(input("CÓDIGO: ").strip())
-                if codigo in produtos["cosmeticos"]:
-                    print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
-                    print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
-                    print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                    excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
-                    print()
-                    if excluir == "S":
-                        del produtos["cosmeticos"][codigo]
-                        print("--------------------------------")
-                        print("|      COSMÉTICO EXCLUÍDO✅    |")
-                        print("--------------------------------")
-                        print()
-                        print(produtos["cosmeticos"]) #Verificação
-                    else:
-                        print("Exclusão cancelada!")
+                busca = verificar_letras(input("Busque pelo produto que deseja excluir: ").strip().lower())
+                achou = ""
+                for codigo in produtos["cosmeticos"]:
+                    if busca in produtos["cosmeticos"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
+                        print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
+                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Produto não encontrado!")
                 else:
-                    print("Não existe cosmético cadastrado com esse código!")
+                    codigo = verificar_numeros(input("CÓDIGO: ").strip())
+                    if codigo in produtos["cosmeticos"]:
+                        print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
+                        print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
+                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
+                        print()
+                        if excluir == "S":
+                            del produtos["cosmeticos"][codigo]
+                            print("--------------------------------")
+                            print("|      COSMÉTICO EXCLUÍDO✅    |")
+                            print("--------------------------------")
+                            print()
+                            print(produtos["cosmeticos"]) #Verificação
+                        else:
+                            print("Exclusão cancelada!")
+                    else:
+                        print("Produto não encontrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             else:
@@ -464,64 +553,94 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("DADOS DO ACESSÓRIO")
                 print()
-                codigo = verificar_numeros(input("Informe o código do acessório: ").strip())
-                if codigo in produtos["acessorios"]:
-                    print()
-                    print(f"TIPO: {produtos['acessorios'][codigo][0]}")
-                    print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
-                    print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
-                else:
-                    print("Esse código não está cadastrado!")
+                busca = verificar_letras(input("Busque pelo acessório: ").strip().lower())
+                achou = ""
+                for codigo in produtos["acessorios"]:
+                    if busca in produtos["acessorios"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
+                        print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
+                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Produto não encontrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             elif resp5 == "3":
                 limpar_terminal()
                 titulo_menu_menor("EIDTAR DADOS")
                 print()
-                codigo = verificar_numeros(input("Informe o código do acessório: ").strip())
-                if codigo in produtos["acessorios"]:
-                    print()
-                    print(f"TIPO: {produtos['acessorios'][codigo][0]}")
-                    print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
-                    print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
-                    print()
-                    tipo_acessorio = verificar_letras(input("Informe o tipo atualizado do acessório: ").strip())
-                    preco = verificar_preco(input("Informe o novo valor para o acessório: R$").strip())
-                    produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
-                    print()
-                    print("--------------------------------")
-                    print("|       DADOS ATUALIZADOS✅    |")
-                    print("--------------------------------")
-                    print()
-                    print(produtos["acessorios"]) #Verificação
+                busca = verificar_letras(input("Busque pelo acessório: ").strip().lower())
+                achou = ""
+                for codigo in produtos["acessorios"]:
+                    if busca in produtos["acessorios"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
+                        print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
+                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Produto não encontrado!")
                 else:
-                    print("Esse código não está cadastrado!")
+                    codigo = verificar_numeros(input("Informe o código do acessório: ").strip())
+                    if codigo in produtos["acessorios"]:
+                        print()
+                        print(f"TIPO: {produtos['acessorios'][codigo][0]}")
+                        print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
+                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print()
+                        tipo_acessorio = verificar_letras(input("Informe o tipo atualizado do acessório: ").strip())
+                        preco = verificar_preco(input("Informe o novo valor para o acessório: R$").strip())
+                        produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
+                        print()
+                        print("--------------------------------")
+                        print("|       DADOS ATUALIZADOS✅    |")
+                        print("--------------------------------")
+                        print()
+                        print(produtos["acessorios"]) #Verificação
+                    else:
+                        print("Esse código não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             elif resp5 == "4":
                 limpar_terminal()
                 titulo_menu_menor("EXCLUIR ACESSÓRIO")
                 print()
-                codigo = verificar_numeros(input("CÓDIGO: ").strip())
-                if codigo in produtos["acessorios"]:
-                    print()
-                    print(f"TIPO: {produtos['acessorios'][codigo][0]}")
-                    print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
-                    print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
-                    print()
-                    excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
-                    if excluir == "S":
-                        del produtos["acessorios"][codigo]
-                        print()
-                        print("--------------------------------")
-                        print("|      ACESSÓRIO EXCLUÍDO✅    |")
-                        print("--------------------------------")
-                        print()
-                        print(produtos["acessorios"]) #Verificação
-                    else:
-                        print("Exclusão cancelada!")
+                busca = verificar_letras(input("Busque pelo acessório: ").strip().lower())
+                achou = ""
+                for codigo in produtos["acessorios"]:
+                    if busca in produtos["acessorios"][codigo][0].lower():
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
+                        print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
+                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print("\033[1;32m----------------------------------\033[m")
+                        achou = "S"
+                if achou != "S":
+                    print("Produto não encontrado!")
                 else:
-                    print("Esse código não está cadastrado!")
+                    codigo = verificar_numeros(input("CÓDIGO: ").strip())
+                    if codigo in produtos["acessorios"]:
+                        print()
+                        print(f"TIPO: {produtos['acessorios'][codigo][0]}")
+                        print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
+                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print()
+                        excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
+                        if excluir == "S":
+                            del produtos["acessorios"][codigo]
+                            print()
+                            print("--------------------------------")
+                            print("|      ACESSÓRIO EXCLUÍDO✅    |")
+                            print("--------------------------------")
+                            print()
+                            print(produtos["acessorios"]) #Verificação
+                        else:
+                            print("Exclusão cancelada!")
+                    else:
+                        print("Esse código não está cadastrado!")
                 print()
                 input('APERTE ENTER PARA PROSSEGUIR')
             else:
@@ -545,7 +664,7 @@ while modulo != "0":
             print()
             id_venda = verificar_numeros(input("Informe o ID da venda: ").strip())
             if id_venda not in vendas:
-                cpf = verificar_numeros(input("Informe o CPF de quem comprou o(s) produto(s): ").strip())
+                cpf = validar_cpf(input("Informe o CPF de quem comprou o(s) produto(s): ").strip())
                 dia_da_compra = input("Informe a data da compra no formato DD/MM/AAAA: ").strip()
                 codigo = verificar_numeros(input("Informe o código do produto: ").strip())
                 quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
@@ -571,84 +690,126 @@ while modulo != "0":
         elif resp6 == "2":
             limpar_terminal()
             titulo_menu_menor("VIZUALIZAR VENDAS")
-            id_venda = verificar_numeros(input("Informe o ID da venda que deseja visualizar: ").strip())
-            if id_venda in vendas:
-                print()
-                print(f"CPF: {vendas[id_venda][0]}")
-                print(f"DATA: {vendas[id_venda][1]}")
-                print("PRODUTOS E QUANTIDADES:")
-                for i in vendas[id_venda][2]:
-                    print("-", end= " ")
-                    print(f"{i}: {vendas[id_venda][2][i]}")
-                print(f"PREÇO TOTAL: {vendas[id_venda][3]}")
+            busca = verificar_letras(input("Busque a venda pelo o nome do cliente: ").strip().lower())
+            achou = ""
+            for id in vendas:
+                if busca in vendas[id][0].lower():
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"NOME: {vendas[id][0]}")
+                    print(f"DATA DA VENDA: {vendas[id][2]}")
+                    print(f"ID DA VENDA: {id}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    achou = "S"
+            if achou != "S":
+                print("Venda não encontrada!")
             else:
-                print("Essa venda não está cadastrada!")
+                id_venda = verificar_numeros(input("Informe o ID da venda que deseja visualizar: ").strip())
+                if id_venda in vendas:
+                    print()
+                    print(f"NOME: {vendas[id_venda][0]}")
+                    print(f"CPF: {vendas[id_venda][1]}")
+                    print(f"DATA: {vendas[id_venda][2]}")
+                    print("PRODUTOS E QUANTIDADES:")
+                    for i in vendas[id_venda][3]:
+                        print("-", end= " ")
+                        print(f"{i}: {vendas[id_venda][3][i]}")
+                    print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
+                else:
+                    print("Essa venda não está cadastrada!")
             print()
             input('APERTE ENTER PARA PROSSEGUIR')
         elif resp6 == "3":
             limpar_terminal()
             titulo_menu_menor("EDITAR VENDA")
-            id_venda = verificar_numeros(input("Informe o ID da venda que deseja editar: ").strip())
-            if id_venda in vendas:
-                print()
-                print(f"CPF: {vendas[id_venda][0]}")
-                print(f"DATA: {vendas[id_venda][1]}")
-                print("PRODUTOS E QUANTIDADES:")
-                for i in vendas[id_venda][2]:
-                    print("-", end= " ")
-                    print(f"{i}: {vendas[id_venda][2][i]}")
-                print(f"PREÇO TOTAL: {vendas[id_venda][3]}")
-                print()
-                cpf = verificar_numeros(input("Informe o CPF CORRETO de quem comprou o(s) produto(s): ").strip())
-                dia_da_compra = input("Informe a data  CORRETA da compra no formato DD/MM/AAAA: ").strip()
-                codigo = verificar_numeros(input("Informe o código CORRETO do produto: ").strip())
-                quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
-                vendas[id_venda] = [cpf, dia_da_compra, {codigo : quantidade}]
-                parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                while parar != "N":
-                    codigo = verificar_numeros(input("Informe o código do produto: ").strip())
-                    quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
-                    vendas[id_venda][2][codigo] = quantidade   
-                    parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                preco= verificar_preco(input("Informe o preço TOTAL CORRETO da compra: R$").strip())
-                vendas[id_venda].append(preco)
-                print()
-                print("--------------------------------")
-                print("|        VENDA EDITADA✅      |")
-                print("--------------------------------")
-                print()
-                print(vendas) #Verificação
+            busca = verificar_letras(input("Busque a venda pelo o nome do cliente: ").strip().lower())
+            achou = ""
+            for id in vendas:
+                if busca in vendas[id][0].lower():
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"NOME: {vendas[id][0]}")
+                    print(f"DATA DA VENDA: {vendas[id][2]}")
+                    print(f"ID DA VENDA: {id}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    achou = "S"
+            if achou != "S":
+                print("Venda não encontrada!")
             else:
-                print("Esse ID não está cadastrado!")
+                id_venda = verificar_numeros(input("Informe o ID da venda que deseja editar: ").strip())
+                if id_venda in vendas:
+                    print()
+                    print(f"NOME: {vendas[id_venda][0]}")
+                    print(f"CPF: {vendas[id_venda][1]}")
+                    print(f"DATA: {vendas[id_venda][2]}")
+                    print("PRODUTOS E QUANTIDADES:")
+                    for i in vendas[id_venda][3]:
+                        print("-", end= " ")
+                        print(f"{i}: {vendas[id_venda][3][i]}")
+                    print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
+                    print()
+                    dia_da_compra = input("Informe a data  CORRETA da compra no formato DD/MM/AAAA: ").strip()
+                    codigo = verificar_numeros(input("Informe o código CORRETO do produto: ").strip())
+                    quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
+                    quantidade = int(quantidade)
+                    vendas[id_venda] = [vendas[id_venda][0],vendas[id_venda][1],dia_da_compra, {codigo : quantidade}]
+                    parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
+                    while parar != "N":
+                        codigo = verificar_numeros(input("Informe o código do produto: ").strip())
+                        quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
+                        vendas[id_venda][3][codigo] = int(quantidade)   
+                        parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
+                    preco= verificar_preco(input("Informe o preço TOTAL CORRETO da compra: R$").strip())
+                    vendas[id_venda].append(preco)
+                    print()
+                    print("--------------------------------")
+                    print("|        VENDA EDITADA✅      |")
+                    print("--------------------------------")
+                    print()
+                    print(vendas) #Verificação
+                else:
+                    print("Esse ID não está cadastrado!")
             print()
             input('APERTE ENTER PARA PROSSEGUIR')
         elif resp6 == "4":
             limpar_terminal()
             titulo_menu_menor("EXCLUIR VENDA")
             print()
-            id_venda = verificar_numeros(input("Informe o ID da venda que deseja excluir: ").strip())
-            if id_venda in vendas:
-                print()
-                print(f"CPF: {vendas[id_venda][0]}")
-                print(f"DATA: {vendas[id_venda][1]}")
-                print("PRODUTOS E QUANTIDADES:")
-                for i in vendas[id_venda][2]:
-                    print("-", end= " ")
-                    print(f"{i}: {vendas[id_venda][2][i]}")
-                print(f"PREÇO TOTAL: {vendas[id_venda][3]}")
-                excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
-                if excluir == "S":
-                    del vendas[id_venda]
-                    print()
-                    print("--------------------------------")
-                    print("|        VENDA EXCLUÍDA✅      |")
-                    print("--------------------------------") 
-                    print()
-                    print(vendas) #verificação
-                else:
-                    print("Exclusão cancelada!") 
+            busca = verificar_letras(input("Busque pelo nome do cliente: ").strip().lower())
+            achou = ''
+            for id in vendas:
+                if busca in vendas[id][0].lower():
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"NOME: {vendas[id][0]}")
+                    print(f"DATA DA VENDA: {vendas[id][2]}")
+                    print(f"ID DA VENDA: {id}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    achou = "S"
+            if achou != "S":
+                print("Venda não encontrada!")
             else:
-                print("Essa venda não está cadastrada!")
+                id_venda = verificar_numeros(input("Informe o ID da venda que deseja excluir: ").strip())
+                if id_venda in vendas:
+                    print()
+                    print(f"NOME: {vendas[id_venda][0]}")
+                    print(f"CPF: {vendas[id_venda][1]}")
+                    print(f"DATA: {vendas[id_venda][2]}")
+                    print("PRODUTOS E QUANTIDADES:")
+                    for i in vendas[id_venda][3]:
+                        print("-", end= " ")
+                        print(f"{i}: {vendas[id_venda][3][i]}")
+                    print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
+                    excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
+                    if excluir == "S":
+                        del vendas[id_venda]
+                        print()
+                        print("--------------------------------")
+                        print("|        VENDA EXCLUÍDA✅      |")
+                        print("--------------------------------") 
+                        print()
+                        print(vendas) #verificação
+                    else:
+                        print("Exclusão cancelada!") 
+                else:
+                    print("Essa venda não está cadastrada!")
             print()
             input('APERTE ENTER PARA PROSSEGUIR') 
         else:
