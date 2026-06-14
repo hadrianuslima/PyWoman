@@ -1,4 +1,5 @@
 import os
+#ESSAS FUNÇÕES ESTÃO AQUI PQ EU USO EM MUITAS PARTES DO CÓDIGO
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -12,13 +13,33 @@ def titulo_menu_maior(titulo):
     print(f"\033[1;31;45m| {titulo:^32} |\033[m")
     print("\033[1;31;45m------------------------------------\033[m")
 
+def verificar_numeros(numeros):
+    while not numeros.isdigit():
+        numeros = input("APENAS NÚMEROS: ").strip()
+    return numeros
 
+def verificar_letras(letras):
+    while not letras.replace(" ",'').isalpha():
+        letras = input("APENAS LETRAS: ").strip()
+    return letras
+
+def verificar_preco(valor):
+    loop = True
+    while loop == True:
+        try:
+            valor = float(valor)
+            return valor
+            loop = False
+        except ValueError:
+                valor = input("INFORME O VALOR DE FORMA CORRETA: R$").strip()
+
+        
 clientes = {
-          #[nome, idade, telefone, cpf]
-    "123": ['Hadrianus', '19', "9999999999", '123'],
-    "234": ['Valeria', '20', '8888888888', '234'],
-    "345": ['Marycele', '44', '7777777777', '345'],
-    "456": ['Roberto', '44', '6666666666', '456']
+          #[nome, telefone, cpf, data de nascimento]
+    "123": ['Hadrianus', "9999999999", '123', '12/09/2006'],
+    "234": ['Valeria', '8888888888', '234', '04/11/2005'],
+    "345": ['Marycele', '7777777777', '345', '24/10/1982'],
+    "456": ['Roberto', '6666666666', '456', '13/11/1982']
 
 }
 
@@ -109,12 +130,15 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("CADASTRAR CLIENTE")
             print()
-            cpf = input("Informe o CPF do cliente: ").strip()
+            cpf = input("Informe o CPF do cliente (SOMENTE NÚMEROS): ").strip()
+            verificar_numeros(cpf)
             if not(cpf in clientes):
-                nome = input("Informe o nome do cliente: ").strip()
-                idade = input("Informe a idade do cliente: ").strip()
+                nome = input("Informe o nome do cliente: ").strip().capitalize()
+                verificar_letras(nome)
                 fone = input("Informe o número do telefone do cliente: ").strip()
-                clientes[cpf] = [nome,idade,fone,cpf] #Add cliente no dicionário de clientes
+                verificar_numeros(fone)
+                data_nasc = input("Informe a data de nascimento do cliente no formato DD/MM/AAAA: ").strip()
+                clientes[cpf] = [nome,fone,cpf,data_nasc] #Add cliente no dicionário de clientes
                 print()
                 print("--------------------------------")
                 print("|      CLIENTE CADASTRADO ✅   |")
@@ -130,11 +154,12 @@ while modulo != "0":
             titulo_menu_menor("DADOS DO CLIENTE")
             print()
             cpf = input("CPF: ").strip()
+            verificar_numeros(cpf)
             if cpf in clientes:
                 print(f"NOME: {clientes[cpf][0]}")
-                print(f"CPF: {clientes[cpf][3]}")
-                print(f"TELEFONE: {clientes[cpf][2]}")
-                print(f"IDADE: {clientes[cpf][1]} anos")
+                print(f"CPF: {clientes[cpf][2]}")
+                print(f"TELEFONE: {clientes[cpf][1]}")
+                print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
             else:
                 print("Cliente não encontrado!")
             print()
@@ -144,16 +169,17 @@ while modulo != "0":
             titulo_menu_menor("ATUALIZAR DADOS")
             print()
             cpf = input("CPF: ").strip()
+            verificar_numeros(cpf)
             if cpf in clientes:
                 print(f"NOME: {clientes[cpf][0]}")
-                print(f"TELEFONE: {clientes[cpf][2]}")
-                print(f"IDADE: {clientes[cpf][1]} anos")
+                print(f"TELEFONE: {clientes[cpf][1]}")
+                print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
                 nome = input("Informe o novo nome para o cliente: ").strip()
-                idade = input("Informe a nova idade para cliente: ").strip()
+                data_nasc = input("Informe a nova data de nascimento para cliente: ").strip()
                 fone = input("Informe o novo número telefone cliente: ").strip()
                 clientes[cpf][0] = nome
-                clientes[cpf][1] = idade
-                clientes[cpf][2] = fone
+                clientes[cpf][3] = data_nasc
+                clientes[cpf][1] = fone
                 print()
                 print("--------------------------------")
                 print("|      DADOS ATUALIZADOS✅     |")
@@ -168,11 +194,12 @@ while modulo != "0":
             titulo_menu_menor("EXCLUIR CADASTRO")
             print()
             cpf = input("CPF: ").strip()
+            verificar_numeros(cpf)
             if cpf in clientes:
                 print(f"NOME: {clientes[cpf][0]}")
-                print(f"CPF: {clientes[cpf][3]}")
-                print(f"TELEFONE: {clientes[cpf][2]}")
-                print(f"IDADE: {clientes[cpf][1]} anos")
+                print(f"CPF: {clientes[cpf][2]}")
+                print(f"TELEFONE: {clientes[cpf][1]}")
+                print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
                 excluir = input("Digite S para excluir o cadastro: ").strip().upper()
                 if excluir == "S":
                     del clientes[cpf]
@@ -222,12 +249,12 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("CADASTRAR PEÇA")
                 print()
-                codigo = input("Informe o código da peça: ").strip()
+                codigo = verificar_numeros(input("Informe o código da peça: ").strip())
                 if not(codigo in produtos["roupas"]):
-                    tipo_peça = input("Informe o tipo de peça: ").strip()
+                    tipo_peça = verificar_letras(input("Informe o tipo de peça: ").strip())
                     tamanho = input("Informe o tamanho da peça: ").strip().upper()
-                    cor = input("Informe a cor da peça: ").strip()
-                    preco = input("Informe o valor da peça: R$").strip()
+                    cor = verificar_letras(input("Informe a cor da peça: ").strip())
+                    preco = verificar_preco(input("Informe o valor da peça: R$").strip())
                     produtos["roupas"][codigo] = [tipo_peça, tamanho, codigo, cor, preco] #Add peça de roupa dentro do dicionario de roupas que esta dentro do dicionario de produtos
                     print()
                     print("--------------------------------")
@@ -243,7 +270,7 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("DADOS DA PEÇA")
                 print()
-                codigo = input("Informe o código da peça: ").strip()
+                codigo = verificar_numeros(input("Informe o código da peça: ").strip())
                 print()
                 if codigo in produtos["roupas"]:
                     print(f"TIPO: {produtos['roupas'][codigo][0]}")
@@ -259,16 +286,16 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("ATUALIZAR PEÇA")
                 print()
-                codigo = input("Informe o código da peça: ").strip()
+                codigo = verificar_numeros(input("Informe o código da peça: ").strip())
                 if codigo in produtos["roupas"]:
                     print(f"TIPO: {produtos['roupas'][codigo][0]}")
                     print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
                     print(f"COR: {produtos['roupas'][codigo][3]}")
                     print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
-                    cor = input("Informe a COR atualizada da peça: ").strip()
-                    tipo_peça = input("Informe o TIPO atualizado da peça: ").strip()
-                    tamanho = input("Informe o TAMANHO atualizado da peça: ").strip()
-                    preco = input("Informe o novo VALOR da peça: R$").strip()
+                    cor = verificar_numeros(input("Informe a COR atualizada da peça: ").strip())
+                    tipo_peça = verificar_letras(input("Informe o TIPO atualizado da peça: ").strip())  
+                    tamanho = verificar_letras(input("Informe o TAMANHO atualizado da peça: ").strip())
+                    preco = verificar_preco(input("Informe o novo VALOR da peça: R$").strip())
                     produtos["roupas"][codigo] = [tipo_peça, tamanho, codigo, cor, preco]
                     print()
                     print("--------------------------------")
@@ -283,7 +310,7 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("EXCLUIR PEÇA")
                 print()
-                codigo = input("CÓDIGO DA PEÇA: ").strip()
+                codigo = verificar_numeros(input("CÓDIGO DA PEÇA: ").strip())
                 if codigo in produtos["roupas"]:
                     print(f"TIPO: {produtos['roupas'][codigo][0]}")
                     print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
@@ -323,10 +350,10 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("CADASTRAR COSMÉTICO")
                 print()
-                codigo = input("Informe o código do cosmético: ").strip()
+                codigo = verificar_numeros(input("Informe o código do cosmético: ").strip())
                 if not(codigo in produtos["cosmeticos"]):
-                    tipo_cosmetico = input("Informe o tipo do cosmético: ").strip()
-                    preco = input("Informe o valor do cosmético: R$").strip()
+                    tipo_cosmetico = verificar_letras(input("Informe o tipo do cosmético: ").strip())
+                    preco = verificar_preco(input("Informe o valor do cosmético: R$").strip())
                     produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
                     print()
                     print("--------------------------------")
@@ -342,7 +369,7 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("DADOS DO COMÉSTICO")
                 print()
-                codigo = input("Informe o código do cosmético: ").strip()
+                codigo =verificar_numeros(input("Informe o código do cosmético: ").strip())
                 print()
                 if codigo in produtos["cosmeticos"]:
                     print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
@@ -356,14 +383,14 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("EDITAR DADOS")
                 print()
-                codigo = input("Informe o código do cosmético: ").strip()
+                codigo = verificar_numeros(input("Informe o código do cosmético: ").strip())
                 print()
                 if codigo in produtos["cosmeticos"]:
                     print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                     print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                     print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                    tipo_cosmetico = input("Informe o TIPO atualizado do cosmético: ").strip()
-                    preco = input("Informe o novo VALOR para o cosmético: R$").strip()
+                    tipo_cosmetico = verificar_letras(input("Informe o TIPO atualizado do cosmético: ").strip())
+                    preco = verificar_preco(input("Informe o novo VALOR para o cosmético: R$").strip())
                     produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
                     print()
                     print("--------------------------------")
@@ -379,7 +406,7 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("EXCLUIR COSMÉTICO")
                 print()
-                codigo = input("CÓDIGO: ").strip()
+                codigo = verificar_numeros(input("CÓDIGO: ").strip())
                 if codigo in produtos["cosmeticos"]:
                     print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                     print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
@@ -418,10 +445,10 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("CADASTRAR ACESSÓRIO")
                 print()
-                codigo = input("Informe o código do acessório: ").strip()
+                codigo = verificar_numeros(input("Informe o código do acessório: ").strip())
                 if not(codigo in produtos["acessorios"]):
-                    tipo_acessorio = input("Informe o tipo do acessório: ").strip()
-                    preco = input("Informe o valor do acessório: R$").strip()
+                    tipo_acessorio = verificar_letras(input("Informe o tipo do acessório: ").strip())
+                    preco = verificar_preco(input("Informe o valor do acessório: R$").strip())
                     produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
                     print()
                     print("--------------------------------")
@@ -437,7 +464,7 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("DADOS DO ACESSÓRIO")
                 print()
-                codigo = input("Informe o código do acessório: ").strip()
+                codigo = verificar_numeros(input("Informe o código do acessório: ").strip())
                 if codigo in produtos["acessorios"]:
                     print()
                     print(f"TIPO: {produtos['acessorios'][codigo][0]}")
@@ -451,15 +478,15 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("EIDTAR DADOS")
                 print()
-                codigo = input("Informe o código do acessório: ").strip()
+                codigo = verificar_numeros(input("Informe o código do acessório: ").strip())
                 if codigo in produtos["acessorios"]:
                     print()
                     print(f"TIPO: {produtos['acessorios'][codigo][0]}")
                     print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                     print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
                     print()
-                    tipo_acessorio = input("Informe o tipo atualizado do acessório: ").strip()
-                    preco = input("Informe o novo valor para o acessório: R$").strip()
+                    tipo_acessorio = verificar_letras(input("Informe o tipo atualizado do acessório: ").strip())
+                    preco = verificar_preco(input("Informe o novo valor para o acessório: R$").strip())
                     produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
                     print()
                     print("--------------------------------")
@@ -475,7 +502,7 @@ while modulo != "0":
                 limpar_terminal()
                 titulo_menu_menor("EXCLUIR ACESSÓRIO")
                 print()
-                codigo = input("CÓDIGO: ").strip()
+                codigo = verificar_numeros(input("CÓDIGO: ").strip())
                 if codigo in produtos["acessorios"]:
                     print()
                     print(f"TIPO: {produtos['acessorios'][codigo][0]}")
@@ -516,20 +543,20 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("ADICIONAR VENDA")
             print()
-            id_venda = input("Informe o ID da venda: ").strip()
+            id_venda = verificar_numeros(input("Informe o ID da venda: ").strip())
             if id_venda not in vendas:
-                cpf = input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
+                cpf = verificar_numeros(input("Informe o CPF de quem comprou o(s) produto(s): ").strip())
                 dia_da_compra = input("Informe a data da compra no formato DD/MM/AAAA: ").strip()
-                codigo = input("Informe o código do produto: ").strip()
-                quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
+                codigo = verificar_numeros(input("Informe o código do produto: ").strip())
+                quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
                 vendas[id_venda] = [cpf, dia_da_compra, {codigo : quantidade}]
                 parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                 while parar != "N":
-                    codigo = input("Informe o código do produto: ").strip()
-                    quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
+                    codigo = verificar_numeros(input("Informe o código do produto: ").strip())
+                    quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
                     vendas[id_venda][2][codigo] = quantidade   
                     parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                preco= input("Informe o preço TOTAL da compra: R$").strip()
+                preco= verificar_preco(input("Informe o preço TOTAL da compra: R$").strip())
                 vendas[id_venda].append(preco)
                 print()
                 print("--------------------------------")
@@ -544,7 +571,7 @@ while modulo != "0":
         elif resp6 == "2":
             limpar_terminal()
             titulo_menu_menor("VIZUALIZAR VENDAS")
-            id_venda = input("Informe o ID da venda que deseja visualizar: ").strip()
+            id_venda = verificar_numeros(input("Informe o ID da venda que deseja visualizar: ").strip())
             if id_venda in vendas:
                 print()
                 print(f"CPF: {vendas[id_venda][0]}")
@@ -561,7 +588,7 @@ while modulo != "0":
         elif resp6 == "3":
             limpar_terminal()
             titulo_menu_menor("EDITAR VENDA")
-            id_venda = input("Informe o ID da venda que deseja editar: ").strip()
+            id_venda = verificar_numeros(input("Informe o ID da venda que deseja editar: ").strip())
             if id_venda in vendas:
                 print()
                 print(f"CPF: {vendas[id_venda][0]}")
@@ -572,18 +599,18 @@ while modulo != "0":
                     print(f"{i}: {vendas[id_venda][2][i]}")
                 print(f"PREÇO TOTAL: {vendas[id_venda][3]}")
                 print()
-                cpf = input("Informe o CPF CORRETO de quem comprou o(s) produto(s): ").strip()
+                cpf = verificar_numeros(input("Informe o CPF CORRETO de quem comprou o(s) produto(s): ").strip())
                 dia_da_compra = input("Informe a data  CORRETA da compra no formato DD/MM/AAAA: ").strip()
-                codigo = input("Informe o código CORRETO do produto: ").strip()
-                quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
+                codigo = verificar_numeros(input("Informe o código CORRETO do produto: ").strip())
+                quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
                 vendas[id_venda] = [cpf, dia_da_compra, {codigo : quantidade}]
                 parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                 while parar != "N":
-                    codigo = input("Informe o código do produto: ").strip()
-                    quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
+                    codigo = verificar_numeros(input("Informe o código do produto: ").strip())
+                    quantidade = verificar_numeros(input("Informe quantas unidades do produto foram compradas: ").strip())
                     vendas[id_venda][2][codigo] = quantidade   
                     parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                preco= input("Informe o preço TOTAL CORRETO da compra: R$").strip()
+                preco= verificar_preco(input("Informe o preço TOTAL CORRETO da compra: R$").strip())
                 vendas[id_venda].append(preco)
                 print()
                 print("--------------------------------")
@@ -599,7 +626,7 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("EXCLUIR VENDA")
             print()
-            id_venda = input("Informe o ID da venda que deseja excluir: ").strip()
+            id_venda = verificar_numeros(input("Informe o ID da venda que deseja excluir: ").strip())
             if id_venda in vendas:
                 print()
                 print(f"CPF: {vendas[id_venda][0]}")
