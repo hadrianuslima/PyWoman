@@ -1,5 +1,6 @@
 import os
 import pickle
+from datetime import datetime
 
 
 # ESSAS FUNÇÕES ESTÃO AQUI PQ EU USO EM MUITAS PARTES DO CÓDIGO
@@ -48,6 +49,16 @@ def validar_cpf(cpf):
     return cpf
 
 
+def validar_data(data):  # Valida de data usando a biblioteca datetime
+    loop = "1"
+    while loop == "1":
+        try:
+            datetime.strptime(data, "%d/%m/%Y")
+            return data
+        except:
+            data = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
+
+
 try:
     arq_clientes = open("clientes.dat", "rb")
     clientes = pickle.load(arq_clientes)
@@ -56,7 +67,7 @@ except:
     clientes = {
         # [nome, telefone, cpf, data de nascimento]
         "12345678901": [
-            "Hadrianus da Silva Mima",
+            "Hadrianus da Silva Lima",
             "9999999999",
             "12345678901",
             "12/09/2006",
@@ -186,9 +197,11 @@ while modulo != "0":
                 fone = verificar_numeros(
                     input("Informe o número do telefone do cliente: ").strip()
                 )
-                data_nasc = input(
-                    "Informe a data de nascimento do cliente no formato DD/MM/AAAA: "
-                ).strip()
+                data_nasc = validar_data(
+                    input(
+                        "Informe a data de nascimento do cliente no formato DD/MM/AAAA: "
+                    ).strip()
+                )
                 clientes[cpf] = [
                     nome,
                     fone,
@@ -256,9 +269,11 @@ while modulo != "0":
                         .strip()
                         .capitalize()
                     )
-                    data_nasc = input(
-                        "Informe a nova data de nascimento para cliente: "
-                    ).strip()
+                    data_nasc = validar_data(
+                        input(
+                            "Informe a nova data de nascimento para cliente: "
+                        ).strip()
+                    )
                     fone = verificar_numeros(
                         input("Informe o novo número telefone cliente: ").strip()
                     )
@@ -815,47 +830,86 @@ while modulo != "0":
                 cpf = validar_cpf(
                     input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
                 )
-                nome = verificar_letras(
-                    input("Informe o nome do cliente: ").strip().capitalize()
-                )
-                dia_da_compra = input(
-                    "Informe a data da compra no formato DD/MM/AAAA: "
-                ).strip()
-                codigo = verificar_numeros(
-                    input("Informe o código do produto: ").strip()
-                )
-                quantidade = verificar_numeros(
-                    input(
-                        "Informe quantas unidades do produto foram compradas: "
-                    ).strip()
-                )
-                quantidade = int(quantidade)
-                vendas[id_venda] = [nome, cpf, dia_da_compra, {codigo: quantidade}]
-                parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                while parar != "N":
+                if cpf in clientes:
+                    nome = clientes[cpf][0]
+                    dia_da_compra = validar_data(
+                        input(
+                            "Informe a data da compra no formato DD/MM/AAAA: "
+                        ).strip()
+                    )
                     codigo = verificar_numeros(
                         input("Informe o código do produto: ").strip()
                     )
-                    quantidade = verificar_numeros(
-                        input(
-                            "Informe quantas unidades do produto foram compradas: "
-                        ).strip()
-                    )
-                    quantidade = int(quantidade)
-                    vendas[id_venda][3][codigo] = quantidade
-                    parar = (
-                        input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                    )
-                preco = verificar_preco(
-                    input("Informe o preço TOTAL da compra: R$").strip()
-                )
-                vendas[id_venda].append(preco)
-                print()
-                print("--------------------------------")
-                print("|       VENDA CADASTRADA✅    |")
-                print("--------------------------------")
-                print()
-                print(vendas)  # Verificação
+                    achou = ""
+                    for setor in produtos:
+                        if codigo in produtos[setor]:
+                            achou = "S"
+                            categoria = setor
+                            break
+                    if achou == "S":
+                        preco = 0
+                        quantidade = verificar_numeros(
+                            input(
+                                "Informe quantas unidades do produto foram compradas: "
+                            ).strip()
+                        )
+                        quantidade = int(quantidade)
+                        preco += produtos[categoria][codigo][4] * quantidade
+                        vendas[id_venda] = [
+                            nome,
+                            cpf,
+                            dia_da_compra,
+                            {codigo: quantidade},
+                        ]
+                        parar = (
+                            input("Deseja adicionar outro produto? [S/N]: ")
+                            .strip()
+                            .upper()
+                        )
+                        while parar != "N":
+                            codigo = verificar_numeros(
+                                input("Informe o código do produto: ").strip()
+                            )
+                            achou = ""
+                            for setor in produtos:
+                                if codigo in produtos[setor]:
+                                    achou = "S"
+                                    categoria = setor
+                                    break
+                            if achou == "S":
+                                quantidade = verificar_numeros(
+                                    input(
+                                        "Informe quantas unidades do produto foram compradas: "
+                                    ).strip()
+                                )
+                                quantidade = int(quantidade)
+                                preco += produtos[categoria][codigo][4] * quantidade
+                                vendas[id_venda][3][codigo] = quantidade
+                                parar = (
+                                    input("Deseja adicionar outro produto? [S/N]: ")
+                                    .strip()
+                                    .upper()
+                                )
+                            else:
+                                print("Esse produto não existe na loja!")
+                                parar = (
+                                    input("Deseja adicionar outro produto? [S/N]: ")
+                                    .strip()
+                                    .upper()
+                                )
+                        print(f"PREÇO TOTAL: R${preco}")
+                        vendas[id_venda].append(preco)
+                        print()
+                        print("--------------------------------")
+                        print("|       VENDA CADASTRADA✅    |")
+                        print("--------------------------------")
+                        print()
+                        print(vendas)  # Verificação
+                    else:
+                        print("Esse produto não existe na loja!")
+                else:
+                    print("Esse cliente não está cadastrado no loja!")
+                    print("Por favor realize o cadastro do cliente primeiro!")
             else:
                 print("Esse ID já está cadastrado!")
             print()
