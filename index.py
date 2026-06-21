@@ -1,11 +1,7 @@
-import os
 import pickle
-from datetime import datetime
+from validacoes import validar_cpf , validar_data , verificar_preco , verificar_letras , verificar_numeros , limpar_terminal
 
 
-# ESSAS FUNÇÕES ESTÃO AQUI PQ EU USO EM MUITAS PARTES DO CÓDIGO
-def limpar_terminal():
-    os.system("cls" if os.name == "nt" else "clear")
 
 
 def titulo_menu_menor(titulo):
@@ -19,140 +15,125 @@ def titulo_menu_maior(titulo):
     print(f"\033[1;31;45m| {titulo:^32} |\033[m")
     print("\033[1;31;45m------------------------------------\033[m")
 
+def recuperar_clientes():
+    try:
+        arq_clientes = open("clientes.dat", "rb")
+        clientes = pickle.load(arq_clientes)
+    except:
+        arq_clientes = open("clientes.dat", "wb")
+        clientes = {
+            # [nome, telefone, cpf, data de nascimento]
+            "12345678901": [
+                "Hadrianus da Silva Lima",
+                "9999999999",
+                "12345678901",
+                "12/09/2006",
+            ],
+            "23456789012": [
+                "Valeria pereira de medeiros",
+                "8888888888",
+                "23456789012",
+                "04/11/2005",
+            ],
+            "34567890123": [
+                "Marycele saraiva da silva",
+                "7777777777",
+                "34567890123",
+                "24/10/1982",
+            ],
+            "45678901234": [
+                "Roberto alves de lima",
+                "6666666666",
+                "45678901234",
+                "13/11/1982",
+            ],
+        }
+        pickle.dump(clientes, arq_clientes)
+    arq_clientes.close()
+    return clientes
 
-def verificar_numeros(numeros):
-    while not numeros.isdigit():
-        numeros = input("APENAS NÚMEROS: ").strip()
-    return numeros
+def recuparar_produtos():
+    try:
+        arq_produtos = open("produtos.dat", "rb")
+        produtos = pickle.load(arq_produtos)
+    except:
+        arq_produtos = open("produtos.dat", "wb")
+        produtos = {
+            "roupas": {
+                "123": ["blusa", "M", "123", "preto", 50.00],
+                "234": ["vestido", "P", "234", "azul", 70.00],
+                "345": ["calça", "G", "345", "vermelho", 40.00],
+                "456": ["sutiã", "M", "456", "preto", 30.00],
+            },
+            "cosmeticos": {
+                "567": ["maquiagem", "567", 70.00],
+                "678": ["perfume", "678", 80.00],
+                "789": ["hidratante", "789", 65.00],
+                "890": ["óleo corporal", "890", 30.50],
+            },
+            "acessorios": {
+                "901": ["pulseira", "901", 38.90],
+                "012": ["colar", "012", 79.99],
+                "112": ["óculos", "112", 58.99],
+            },
+        }
+        pickle.dump(produtos, arq_produtos)
+    arq_produtos.close()
+    return produtos
 
+def recuprar_vendas():
+    try:
+        arq_vendas = open("vendas.dat", "rb")
+        vendas = pickle.load(arq_vendas)
+    except:
+        arq_vendas = open("vendas.dat", "wb")
+        vendas = {  # Aqui nesse dicionário eu coloquei um ID para cada venda,
+            # que recebe uma lista no qual tem o nome do cliente, CPF, data da venda,
+            # um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, e por ultimo o valor total da venda
+            "11111": [
+                "Hadrianus da silva lima",
+                "12345678901",
+                "11/11/2011",
+                {"123": 3, "234": 2},
+                1000.00,
+            ],
+            "22222": [
+                "Valeria pereira de medeiros",
+                "23456789012",
+                "11/11/2011",
+                {"123": 3, "234": 4},
+                1500.00,
+            ],
+            "33333": [
+                "Marycele saraiva da silva",
+                "34567890123",
+                "12/11/2011",
+                {"234": 6, "345": 9},
+                2000.00,
+            ],
+        }
+        pickle.dump(vendas, arq_vendas)
+    arq_vendas.close()
+    return vendas
 
-def verificar_letras(letras):
-    while not letras.replace(" ", "").isalpha():
-        letras = input("APENAS LETRAS: ").strip()
-    return letras
-
-
-def verificar_preco(valor):
-    loop = True
-    while loop == True:
-        try:
-            valor = float(valor)
-            return valor
-            loop = False
-        except ValueError:
-            valor = input("INFORME O VALOR DE FORMA CORRETA: R$").strip()
-
-
-def validar_cpf(cpf):
-    while not (cpf.isdigit() and (len(cpf) == 11)):
-        cpf = input("Informe o CPF de forma correta (SOMENTE 11 NÚMEROS): ").strip()
-    return cpf
-
-
-def validar_data(data):  # Valida de data usando a biblioteca datetime
-    loop = "1"
-    while loop == "1":
-        try:
-            datetime.strptime(data, "%d/%m/%Y")
-            return data
-        except:
-            data = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
-
-
-try:
-    arq_clientes = open("clientes.dat", "rb")
-    clientes = pickle.load(arq_clientes)
-except:
+def gravar_clientes(clientes_loja):
     arq_clientes = open("clientes.dat", "wb")
-    clientes = {
-        # [nome, telefone, cpf, data de nascimento]
-        "12345678901": [
-            "Hadrianus da Silva Lima",
-            "9999999999",
-            "12345678901",
-            "12/09/2006",
-        ],
-        "23456789012": [
-            "Valeria pereira de medeiros",
-            "8888888888",
-            "23456789012",
-            "04/11/2005",
-        ],
-        "34567890123": [
-            "Marycele saraiva da silva",
-            "7777777777",
-            "34567890123",
-            "24/10/1982",
-        ],
-        "45678901234": [
-            "Roberto alves de lima",
-            "6666666666",
-            "45678901234",
-            "13/11/1982",
-        ],
-    }
     pickle.dump(clientes, arq_clientes)
-arq_clientes.close()
+    arq_clientes.close()
 
-try:
-    arq_produtos = open("produtos.dat", "rb")
-    produtos = pickle.load(arq_produtos)
-except:
+def gravar_produtos(produtos_loja):
     arq_produtos = open("produtos.dat", "wb")
-    produtos = {
-        "roupas": {
-            "123": ["blusa", "M", "123", "preto", 50.00],
-            "234": ["vestido", "P", "234", "azul", 70.00],
-            "345": ["calça", "G", "345", "vermelho", 40.00],
-            "456": ["sutiã", "M", "456", "preto", 30.00],
-        },
-        "cosmeticos": {
-            "567": ["maquiagem", "567", 70.00],
-            "678": ["perfume", "678", 80.00],
-            "789": ["hidratante", "789", 65.00],
-            "890": ["óleo corporal", "890", 30.50],
-        },
-        "acessorios": {
-            "901": ["pulseira", "901", 38.90],
-            "012": ["colar", "012", 79.99],
-            "112": ["óculos", "112", 58.99],
-        },
-    }
     pickle.dump(produtos, arq_produtos)
-arq_produtos.close()
-
-try:
-    arq_vendas = open("vendas.dat", "rb")
-    vendas = pickle.load(arq_vendas)
-except:
+    arq_produtos.close()
+    
+def gravar_vendas(vendas_loja):
     arq_vendas = open("vendas.dat", "wb")
-    vendas = {  # Aqui nesse dicionário eu coloquei um ID para cada venda,
-        # que recebe uma lista no qual tem o nome do cliente, CPF, data da venda,
-        # um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, e por ultimo o valor total da venda
-        "11111": [
-            "Hadrianus da silva lima",
-            "12345678901",
-            "11/11/2011",
-            {"123": 3, "234": 2},
-            1000.00,
-        ],
-        "22222": [
-            "Valeria pereira de medeiros",
-            "23456789012",
-            "11/11/2011",
-            {"123": 3, "234": 4},
-            1500.00,
-        ],
-        "33333": [
-            "Marycele saraiva da silva",
-            "34567890123",
-            "12/11/2011",
-            {"234": 6, "345": 9},
-            2000.00,
-        ],
-    }
     pickle.dump(vendas, arq_vendas)
-arq_vendas.close()
+    arq_vendas.close()
+
+clientes = recuperar_clientes()
+produtos = recuparar_produtos()
+vendas = recuprar_vendas()
 
 modulo = ""
 while modulo != "0":
@@ -164,7 +145,7 @@ while modulo != "0":
     print("|| 3- Vendas💵                ||")
     print("|| 4- Relatórios📄            ||")
     print("|| 5- Sobre o sistemaℹ️        ||")
-    print("\\ 0- Sair🔙                 //")
+    print(" \  0- Sair🔙                 //")
     print("  ---------------------------")
     modulo = input("Informe o módulo que deseja acessar: ").strip()
     modulos_validos = ["0", "1", "2", "3", "4", "5"]
@@ -177,7 +158,7 @@ while modulo != "0":
         print("|| 2- Ver dados do clienteℹ️   ||")
         print("|| 3- Atualizar dados🔁       ||")
         print("|| 4- Excluir cadastro 🗑️      ||")
-        print("\\ 0- Voltar🔙                //")
+        print(" \  0- Voltar🔙                /")
         print("  ----------------------------")
         resp1 = input("Informe a opção que deseja: ").strip()
         resp1_validas = ["0", "1", "2", "3", "4"]
@@ -187,10 +168,10 @@ while modulo != "0":
             limpar_terminal()
             titulo_menu_menor("CADASTRAR CLIENTE")
             print()
-            cpf = validar_cpf(
-                input("Informe o CPF do cliente (SOMENTE NÚMEROS): ").strip()
-            )
-            if not (cpf in clientes):
+            cpf_cliente = input("Informe o CPF do cliente no formato XXX.XXX.XXX-XX: ").strip()
+            while validar_cpf(cpf_cliente) == False:
+                cpf_cliente = input("Informe um CPF válido: ").strip()
+            if not (cpf_cliente in clientes):
                 nome = verificar_letras(
                     input("Informe o nome do cliente: ").strip().capitalize()
                 )
@@ -202,10 +183,10 @@ while modulo != "0":
                         "Informe a data de nascimento do cliente no formato DD/MM/AAAA: "
                     ).strip()
                 )
-                clientes[cpf] = [
+                clientes[cpf_cliente] = [
                     nome,
                     fone,
-                    cpf,
+                    cpf_cliente,
                     data_nasc,
                 ]  # Add cliente no dicionário de clientes
                 print()
@@ -257,13 +238,15 @@ while modulo != "0":
             ):  # Usei como forma de informar se não há cliente relacionado a pesquisa
                 print("Cliente não encontrado!")
             else:
-                cpf = validar_cpf(
+                cpf_cliente = validar_cpf(
                     input("Informe o CPF do cliente que deseja editar: ").strip()
                 )
-                if cpf in clientes:
-                    print(f"NOME: {clientes[cpf][0]}")
-                    print(f"TELEFONE: {clientes[cpf][1]}")
-                    print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
+                while validar_cpf(cpf_cliente) == False:
+                    cpf_cliente = input("Informe um CPF válido: ").strip()
+                if cpf_cliente in clientes:
+                    print(f"NOME: {clientes[cpf_cliente][0]}")
+                    print(f"TELEFONE: {clientes[cpf_cliente][1]}")
+                    print(f"DATA DE NASCIMENTO: {clientes[cpf_cliente][3]}")
                     nome = verificar_letras(
                         input("Informe o novo nome para o cliente: ")
                         .strip()
@@ -277,9 +260,9 @@ while modulo != "0":
                     fone = verificar_numeros(
                         input("Informe o novo número telefone cliente: ").strip()
                     )
-                    clientes[cpf][0] = nome
-                    clientes[cpf][3] = data_nasc
-                    clientes[cpf][1] = fone
+                    clientes[cpf_cliente][0] = nome
+                    clientes[cpf_cliente][3] = data_nasc
+                    clientes[cpf_cliente][1] = fone
                     print()
                     print("--------------------------------")
                     print("|      DADOS ATUALIZADOS✅     |")
@@ -305,19 +288,21 @@ while modulo != "0":
             if achou != "S":
                 print("Cliente não encontrado!")
             else:
-                cpf = validar_cpf(
+                cpf_cliente = validar_cpf(
                     input("Informe o CPF do cliente que deseja excluir: ").strip()
                 )
-                if cpf in clientes:
-                    print(f"NOME: {clientes[cpf][0]}")
-                    print(f"CPF: {clientes[cpf][2]}")
-                    print(f"TELEFONE: {clientes[cpf][1]}")
-                    print(f"DATA DE NASCIMENTO: {clientes[cpf][3]}")
+                while validar_cpf(cpf_cliente) == False:
+                    cpf_cliente = input("Informe um CPF válido: ").strip()
+                if cpf_cliente in clientes:
+                    print(f"NOME: {clientes[cpf_cliente][0]}")
+                    print(f"CPF: {clientes[cpf_cliente][2]}")
+                    print(f"TELEFONE: {clientes[cpf_cliente][1]}")
+                    print(f"DATA DE NASCIMENTO: {clientes[cpf_cliente][3]}")
                     excluir = (
                         input("Digite S para excluir o cadastro: ").strip().upper()
                     )
                     if excluir == "S":
-                        del clientes[cpf]
+                        del clientes[cpf_cliente]
                         print("--------------------------------")
                         print("|       CADASTRO EXCLUÍDO✅    |")
                         print("--------------------------------")
@@ -338,7 +323,7 @@ while modulo != "0":
         print("|| 1- Roupas👗                ||")
         print("|| 2- Cosméticos💄            ||")
         print("|| 3- Acessórios👓            ||")
-        print("\\ 0- Voltar 🔙             //")
+        print(" \  0- Voltar 🔙               /")
         print("  ----------------------------")
         resp2 = input("Informe a opção que deseja: ").strip()
         resp2_validas = ["0", "1", "2", "3"]
@@ -353,7 +338,7 @@ while modulo != "0":
             print("|| 2- Ver informações da peçaℹ️    ||")
             print("|| 3- Editar informações da peça🔁||")
             print("|| 4- Excluir peça🗑️               ||")
-            print("\\ 0- Voltar🔙                    //")
+            print(" \  0- Voltar🔙                     /")
             print("   ------------------------------")
             resp3 = input("Informe a opção que deseja: ").strip()
             resp3_validas = ["0", "1", "2", "3", "4"]
@@ -520,7 +505,7 @@ while modulo != "0":
             print("|| 2- Dados do cosméticoℹ️         ||")
             print("|| 3- Editar dados do cosmético🔁 ||")
             print("|| 4- Excluir cosmético🗑️          ||")
-            print("\\ 0- Voltar🔙                    // ")
+            print(" \  0- Voltar🔙                     / ")
             print("  --------------------------------")
             resp4 = input("Informe a opção que deseja: ").strip()
             resp4_validas = ["0", "1", "2", "3", "4"]
@@ -665,7 +650,7 @@ while modulo != "0":
             print("|| 2- Dados do acessórioℹ️        ||")
             print("|| 3- Editar dados do acessório🔁||")
             print("|| 4- Excluir acessório🗑️         ||")
-            print("\\ 0- Voltar🔙                   //")
+            print(" \  0- Voltar🔙                    /")
             print("  ------------------------------")
             resp5 = input("Informe a opção que deseja: ").strip()
             resp5_validas = ["0", "1", "2", "3", "4"]
@@ -815,7 +800,7 @@ while modulo != "0":
         print("|| 2- Visualizar vendasℹ️          ||")
         print("|| 3- Editar venda🔁              ||")
         print("|| 4- Excluir uma venda🗑️          ||")
-        print("\\ 0- Voltar🔙                    //")
+        print(" \  0- Voltar🔙                     /")
         print("  ---------------------------------")
         resp6 = input("Informe a opção desejada: ").strip()
         resp6_validas = ["0", "1", "2", "3", "4"]
@@ -827,11 +812,13 @@ while modulo != "0":
             print()
             id_venda = verificar_numeros(input("Informe o ID da venda: ").strip())
             if id_venda not in vendas:
-                cpf = validar_cpf(
+                cpf_cliente = validar_cpf(
                     input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
                 )
-                if cpf in clientes:
-                    nome = clientes[cpf][0]
+                while validar_cpf(cpf_cliente) == False:
+                    cpf_cliente = input("Informe um CPF válido: ").strip()
+                if cpf_cliente in clientes:
+                    nome = clientes[cpf_cliente][0]
                     dia_da_compra = validar_data(
                         input(
                             "Informe a data da compra no formato DD/MM/AAAA: "
@@ -857,7 +844,7 @@ while modulo != "0":
                         preco += produtos[categoria][codigo][4] * quantidade
                         vendas[id_venda] = [
                             nome,
-                            cpf,
+                            cpf_cliente,
                             dia_da_compra,
                             {codigo: quantidade},
                         ]
@@ -1090,7 +1077,7 @@ while modulo != "0":
         print("|| 3- Lista de clientes           ||")
         print("|| 4- Produtos mais vendidos      ||")
         print("|| 5- Preferência de clientes     ||")
-        print("\\ 0- Voltar                     //")
+        print(" \  0- Voltar                      /")
         print("  --------------------------------")
         resp7 = input("Informe a opção desejada: ").strip()
         resp7_validas = ["0", "1", "2", "3", "4", "5"]
@@ -1116,20 +1103,12 @@ while modulo != "0":
         print("|| 1- hadrianus.lima.130@ufrn.edu.br     ||")
         print("||              LICENÇA MIT              ||")
         print("||  https://opensource.org/licenses/MIT  ||")
-        print("\\                                       //")
+        print(" \                                        /")
         print("  ---------------------------------------")
         input("APERTE ENTER PARA PROSSEGUIR")
 
 print("PROGRAMA FECHADO")
 
-arq_clientes = open("clientes.dat", "wb")
-pickle.dump(clientes, arq_clientes)
-arq_clientes.close()
-
-arq_produtos = open("produtos.dat", "wb")
-pickle.dump(produtos, arq_produtos)
-arq_produtos.close()
-
-arq_vendas = open("vendas.dat", "wb")
-pickle.dump(vendas, arq_vendas)
-arq_vendas.close()
+gravar_clientes(clientes)
+gravar_produtos(produtos)
+gravar_vendas(vendas)
