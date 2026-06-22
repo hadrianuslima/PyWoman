@@ -31,22 +31,21 @@ def validar_cpf(cpf):
 
 def validar_data(data):
     from datetime import datetime  # Valida de data usando a biblioteca datetime
-    loop = "1"
-    while loop == "1":
-        try:
-            datetime.strptime(data, "%d/%m/%Y")
-            return data
-        except:
-            data = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
+    try:
+        datetime.strptime(data, "%d/%m/%Y")
+        return True
+    except:
+        return False
 
 def limpar_terminal():
     import os
     os.system("cls" if os.name == "nt" else "clear")
 
 def verificar_letras(letras):
-    while not letras.replace(" ", "").isalpha():
-        letras = input("APENAS LETRAS: ").strip()
-    return letras
+    if letras.replace(" ","").isalpha():
+        return True
+    else:
+        return False
 
 def verificar_numeros(numeros):
     while not numeros.isdigit():

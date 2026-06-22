@@ -2,19 +2,6 @@ import pickle
 from validacoes import validar_cpf , validar_data , verificar_preco , verificar_letras , verificar_numeros , limpar_terminal
 
 
-
-
-def titulo_menu_menor(titulo):
-    print("\033[1;31;45m--------------------------------\033[m")
-    print(f"\033[1;31;45m| {titulo:^28} |\033[m")
-    print("\033[1;31;45m--------------------------------\033[m")
-
-
-def titulo_menu_maior(titulo):
-    print("\033[1;31;45m------------------------------------\033[m")
-    print(f"\033[1;31;45m| {titulo:^32} |\033[m")
-    print("\033[1;31;45m------------------------------------\033[m")
-
 def recuperar_clientes():
     try:
         arq_clientes = open("clientes.dat", "rb")
@@ -135,11 +122,15 @@ clientes = recuperar_clientes()
 produtos = recuparar_produtos()
 vendas = recuprar_vendas()
 
+rosa_inicio = "\033[1;31;45m"
+rosa_final = "\033[m"
+
 modulo = ""
 while modulo != "0":
     limpar_terminal()
-    titulo_menu_menor("Py WOMAN")
-    # As barras não estão totalmente alinhadas aqui, mas no terminal está
+    print(rosa_inicio+"--------------------------------"+rosa_final)
+    print(rosa_inicio+"|           Py WOMAN           |"+rosa_final)
+    print(rosa_inicio+"--------------------------------"+rosa_final) # As barras não estão totalmente alinhadas aqui, mas no terminal está
     print("|| 1- Clientes👤              ||")
     print("|| 2- Produtos🛍️               ||")
     print("|| 3- Vendas💵                ||")
@@ -153,7 +144,9 @@ while modulo != "0":
         modulo = input("Informe uma opção válida: ").strip()
     while modulo == "1":
         limpar_terminal()
-        titulo_menu_menor("MÓDULO DE CLIENTES")
+        print(rosa_inicio+"--------------------------------"+rosa_final)
+        print(rosa_inicio+"|      MÓDULO DE CLIENTES      |"+rosa_final)
+        print(rosa_inicio+"--------------------------------"+rosa_final)
         print("|| 1- Cadastrar cliente✅     ||")
         print("|| 2- Ver dados do clienteℹ️   ||")
         print("|| 3- Atualizar dados🔁       ||")
@@ -166,23 +159,25 @@ while modulo != "0":
             resp1 = input("Informe uma opção válida: ").strip()
         if resp1 == "1":
             limpar_terminal()
-            titulo_menu_menor("CADASTRAR CLIENTE")
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|      CADASTRAR CLIENTE       |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
             print()
             cpf_cliente = input("Informe o CPF do cliente no formato XXX.XXX.XXX-XX: ").strip()
             while validar_cpf(cpf_cliente) == False:
                 cpf_cliente = input("Informe um CPF válido: ").strip()
             if not (cpf_cliente in clientes):
-                nome = verificar_letras(
-                    input("Informe o nome do cliente: ").strip().capitalize()
-                )
+                nome = input("Informe o nome do cliente: ").strip().capitalize()
+                while verificar_letras(nome) == False:
+                    nome = input("Informe o nome CORRETO do cliente : ").strip().capitalize()
                 fone = verificar_numeros(
                     input("Informe o número do telefone do cliente: ").strip()
                 )
-                data_nasc = validar_data(
-                    input(
-                        "Informe a data de nascimento do cliente no formato DD/MM/AAAA: "
-                    ).strip()
-                )
+                data_nasc = input("Informe a data de nascimento do cliente no formato DD/MM/AAAA: ").strip()
+
+                while validar_data(data_nasc) == False:
+                   data_nasc = input("Informe a data válida no formato DD/MM/AAAA: ").strip()
+
                 clientes[cpf_cliente] = [
                     nome,
                     fone,
@@ -201,9 +196,13 @@ while modulo != "0":
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp1 == "2":
             limpar_terminal()
-            titulo_menu_menor("DADOS DO CLIENTE")
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|       DADOS DO CLIENTES      |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
             print()
-            busca = verificar_letras(input("NOME: ").strip().lower())
+            busca = input("NOME: ").strip().lower()
+            while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for i in clientes:
                 if busca in clientes[i][0].lower():
@@ -222,9 +221,14 @@ while modulo != "0":
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp1 == "3":
             limpar_terminal()
-            titulo_menu_menor("ATUALIZAR DADOS")
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|       ATUALIZAR DADOS        |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            #titulo_menu_menor("ATUALIZAR DADOS")
             print()
-            busca = verificar_letras(input("NOME: ").strip().lower())
+            busca = input("NOME: ").strip().lower()
+            while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS: ").strip().lower()
             achou = ""
             for i in clientes:
                 if busca in clientes[i][0].lower():
@@ -247,16 +251,14 @@ while modulo != "0":
                     print(f"NOME: {clientes[cpf_cliente][0]}")
                     print(f"TELEFONE: {clientes[cpf_cliente][1]}")
                     print(f"DATA DE NASCIMENTO: {clientes[cpf_cliente][3]}")
-                    nome = verificar_letras(
-                        input("Informe o novo nome para o cliente: ")
-                        .strip()
-                        .capitalize()
-                    )
-                    data_nasc = validar_data(
-                        input(
+                    nome = input("Informe o novo nome para o cliente: ").strip().capitalize()
+                    while verificar_letras(nome) == False:
+                        nome = input("Informe o nome CORRETO do cliente : ").strip().capitalize()
+                    data_nasc = input(
                             "Informe a nova data de nascimento para cliente: "
                         ).strip()
-                    )
+                    while validar_data(data_nasc) == False:
+                        data_nasc = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
                     fone = verificar_numeros(
                         input("Informe o novo número telefone cliente: ").strip()
                     )
@@ -274,9 +276,13 @@ while modulo != "0":
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp1 == "4":
             limpar_terminal()
-            titulo_menu_menor("EXCLUIR CADASTRO")
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|        EXCLUIR CADASTRO      |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
             print()
-            busca = verificar_letras(input("NOME: ").strip().lower())
+            busca = input("NOME: ").strip().lower()
+            while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for i in clientes:
                 if busca in clientes[i][0].lower():
@@ -319,7 +325,9 @@ while modulo != "0":
 
     while modulo == "2":
         limpar_terminal()
-        titulo_menu_menor("MÓDULO DE PRODUTOS")
+        print(rosa_inicio+"--------------------------------"+rosa_final)
+        print(rosa_inicio+"|      MÓDULO DE PRODUTOS      |"+rosa_final)
+        print(rosa_inicio+"--------------------------------"+rosa_final)
         print("|| 1- Roupas👗                ||")
         print("|| 2- Cosméticos💄            ||")
         print("|| 3- Acessórios👓            ||")
@@ -333,12 +341,15 @@ while modulo != "0":
             break
         while resp2 == "1":
             limpar_terminal()
-            titulo_menu_maior("ROUPAS FEMININAS")
+            print(rosa_inicio+"------------------------------------"+rosa_final)
+            print(rosa_inicio+"|         ROUPAS FEMININA          |"+rosa_final)
+            print(rosa_inicio+"------------------------------------"+rosa_final)
+            #titulo_menu_maior("ROUPAS FEMININAS")
             print("|| 1- Cadastrar peça de roupa✅   ||")
             print("|| 2- Ver informações da peçaℹ️    ||")
             print("|| 3- Editar informações da peça🔁||")
             print("|| 4- Excluir peça🗑️               ||")
-            print(" \  0- Voltar🔙                     /")
+            print(" \  0- Voltar🔙                    /")
             print("   ------------------------------")
             resp3 = input("Informe a opção que deseja: ").strip()
             resp3_validas = ["0", "1", "2", "3", "4"]
@@ -346,15 +357,19 @@ while modulo != "0":
                 resp3 = input("Informe uma opção válida: ").strip()
             if resp3 == "1":
                 limpar_terminal()
-                titulo_menu_menor("CADASTRAR PEÇA")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|       CADASTRAR PEÇA         |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
                 codigo = verificar_numeros(input("Informe o código da peça: ").strip())
                 if not (codigo in produtos["roupas"]):
-                    tipo_peca = verificar_letras(
-                        input("Informe o tipo de peça: ").strip()
-                    )
+                    tipo_peca = input("Informe o tipo de peça: ").strip()
+                    while verificar_letras(tipo_peca) == False:
+                        tipo_peca = input("SOMENTE LETRAS : ").strip()
                     tamanho = input("Informe o tamanho da peça: ").strip().upper()
-                    cor = verificar_letras(input("Informe a cor da peça: ").strip())
+                    cor = input("Informe a cor da peça: ").strip()
+                    while verificar_letras(cor) == False:
+                        cor = input("SOMENTE LETRAS : ").strip()
                     preco = verificar_preco(
                         input("Informe o valor da peça: R$").strip()
                     )
@@ -377,11 +392,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp3 == "2":
                 limpar_terminal()
-                titulo_menu_menor("DADOS DA PEÇA")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|        DADOS DA PEÇA         |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("QUAL ROUPA DESEJA BUSCAR: ").strip().lower()
-                )
+                busca = input("QUAL ROUPA DESEJA BUSCAR: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["roupas"]:
                     if busca in produtos["roupas"][codigo][0].lower():
@@ -399,11 +416,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp3 == "3":
                 limpar_terminal()
-                titulo_menu_menor("ATUALIZAR PEÇA")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|       ATUALIZAR PEÇA         |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("QUAL ROUPA DESEJA ATUALIZAR: ").strip().lower()
-                )
+                busca = input("QUAL ROUPA DESEJA ATUALIZAR: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["roupas"]:
                     if busca in produtos["roupas"][codigo][0].lower():
@@ -423,15 +442,13 @@ while modulo != "0":
                         print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
                         print(f"COR: {produtos['roupas'][codigo][3]}")
                         print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
-                        cor = verificar_letras(
-                            input("Informe a COR atualizada da peça: ").strip()
-                        )
-                        tipo_peca = verificar_letras(
-                            input("Informe o TIPO atualizado da peça: ").strip()
-                        )
-                        tamanho = verificar_letras(
-                            input("Informe o TAMANHO atualizado da peça: ").strip()
-                        )
+                        cor = input("Informe a COR atualizada da peça: ").strip()
+                        while verificar_letras(cor) == False:
+                            cor = input("SOMENTE LETRAS : ").strip()
+                        tipo_peca = input("Informe o TIPO atualizado da peça: ").strip()
+                        while verificar_letras(tipo_peca) == False:
+                            tipo_peca = input("SOMENTE LETRAS : ").strip()
+                        tamanho = input("Informe o TAMANHO atualizado da peça: ").strip()
                         preco = verificar_preco(
                             input("Informe o novo VALOR da peça: R$").strip()
                         )
@@ -453,11 +470,11 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp3 == "4":
                 limpar_terminal()
-                titulo_menu_menor("EXCLUIR PEÇA")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|         EXCLUIR PEÇA         |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("Busque pela peça de deseja excluir: ").strip().lower()
-                )
+                busca = input("Busque pela peça de deseja excluir: ").strip().lower()
                 achou = ""
                 for codigo in produtos["roupas"]:
                     if busca in produtos["roupas"][codigo][0].lower():
@@ -500,7 +517,9 @@ while modulo != "0":
                 break
         while resp2 == "2":
             limpar_terminal()
-            titulo_menu_maior("MÓDULOS DE COSMÉTICOS")
+            print(rosa_inicio+"------------------------------------"+rosa_final)
+            print(rosa_inicio+"|        COSMÉTICOS FEMININOS      |"+rosa_final)
+            print(rosa_inicio+"------------------------------------"+rosa_final)
             print("|| 1- Cadastrar cosméticos✅      ||")
             print("|| 2- Dados do cosméticoℹ️         ||")
             print("|| 3- Editar dados do cosmético🔁 ||")
@@ -513,15 +532,18 @@ while modulo != "0":
                 resp4 = input("Informe uma opção válida: ").strip()
             if resp4 == "1":
                 limpar_terminal()
-                titulo_menu_menor("CADASTRAR COSMÉTICO")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|     CADASTRAR COSMÉTICOS     |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                #titulo_menu_menor("CADASTRAR COSMÉTICO")
                 print()
                 codigo = verificar_numeros(
                     input("Informe o código do cosmético: ").strip()
                 )
                 if not (codigo in produtos["cosmeticos"]):
-                    tipo_cosmetico = verificar_letras(
-                        input("Informe o tipo do cosmético: ").strip()
-                    )
+                    tipo_cosmetico = input("Informe o tipo do cosmético: ").strip()
+                    while verificar_letras(tipo_acessorio) == False:
+                        tipo_acessorio = input("SOMENTE LETRAS : ").strip()
                     preco = verificar_preco(
                         input("Informe o valor do cosmético: R$").strip()
                     )
@@ -538,9 +560,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp4 == "2":
                 limpar_terminal()
-                titulo_menu_menor("DADOS DO COMÉSTICO")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|      DADOS DO COSMÉTICO      |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(input("Busque pelo produto: ").strip().lower())
+                busca = input("Busque pelo produto: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["cosmeticos"]:
                     if busca in produtos["cosmeticos"][codigo][0].lower():
@@ -556,11 +582,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp4 == "3":
                 limpar_terminal()
-                titulo_menu_menor("EDITAR DADOS")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|         EDITAR DADOS         |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("Busque pelo produto que deseja editar: ").strip().lower()
-                )
+                busca = input("Busque pelo produto que deseja editar: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["cosmeticos"]:
                     if busca in produtos["cosmeticos"][codigo][0].lower():
@@ -581,9 +609,9 @@ while modulo != "0":
                         print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
-                        tipo_cosmetico = verificar_letras(
-                            input("Informe o TIPO atualizado do cosmético: ").strip()
-                        )
+                        tipo_cosmetico = input("Informe o TIPO atualizado do cosmético: ").strip()
+                        while verificar_letras(tipo_cosmetico) == False:
+                            tipo_cosmetico = input("SOMENTE LETRAS : ").strip()
                         preco = verificar_preco(
                             input("Informe o novo VALOR para o cosmético: R$").strip()
                         )
@@ -600,11 +628,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp4 == "4":
                 limpar_terminal()
-                titulo_menu_menor("EXCLUIR COSMÉTICO")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|       EXCLUIR COSMÉTICO      |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("Busque pelo produto que deseja excluir: ").strip().lower()
-                )
+                busca = input("Busque pelo produto que deseja excluir: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["cosmeticos"]:
                     if busca in produtos["cosmeticos"][codigo][0].lower():
@@ -645,12 +675,14 @@ while modulo != "0":
                 break
         while resp2 == "3":
             limpar_terminal()
-            titulo_menu_maior("ACESSÓRIOS FEMININOS")
+            print(rosa_inicio+"-----------------------------------"+rosa_final)
+            print(rosa_inicio+"|        ACESSÓRIOS FEMININOS     |"+rosa_final)
+            print(rosa_inicio+"-----------------------------------"+rosa_final)
             print("|| 1- Cadastrar acessório✅      ||")
             print("|| 2- Dados do acessórioℹ️        ||")
             print("|| 3- Editar dados do acessório🔁||")
             print("|| 4- Excluir acessório🗑️         ||")
-            print(" \  0- Voltar🔙                    /")
+            print(" \  0- Voltar🔙                   /")
             print("  ------------------------------")
             resp5 = input("Informe a opção que deseja: ").strip()
             resp5_validas = ["0", "1", "2", "3", "4"]
@@ -658,15 +690,17 @@ while modulo != "0":
                 resp5 = input("Informe uma opção válida: ").strip()
             if resp5 == "1":
                 limpar_terminal()
-                titulo_menu_menor("CADASTRAR ACESSÓRIO")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|     CADASTRAR ACESSÓRIO      |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
                 codigo = verificar_numeros(
                     input("Informe o código do acessório: ").strip()
                 )
                 if not (codigo in produtos["acessorios"]):
-                    tipo_acessorio = verificar_letras(
-                        input("Informe o tipo do acessório: ").strip()
-                    )
+                    tipo_acessorio = input("Informe o tipo do acessório: ").strip()
+                    while verificar_letras(tipo_acessorio) == False:
+                        tipo_acessorio = input("SOMENTE LETRAS : ").strip()
                     preco = verificar_preco(
                         input("Informe o valor do acessório: R$").strip()
                     )
@@ -683,11 +717,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp5 == "2":
                 limpar_terminal()
-                titulo_menu_menor("DADOS DO ACESSÓRIO")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|      DADOS DO ACESSÓRIO      |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("Busque pelo acessório: ").strip().lower()
-                )
+                busca = input("Busque pelo acessório: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["acessorios"]:
                     if busca in produtos["acessorios"][codigo][0].lower():
@@ -703,11 +739,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp5 == "3":
                 limpar_terminal()
-                titulo_menu_menor("EIDTAR DADOS")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|        EDITAR DADOS          |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("Busque pelo acessório: ").strip().lower()
-                )
+                busca = input("Busque pelo acessório: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["acessorios"]:
                     if busca in produtos["acessorios"][codigo][0].lower():
@@ -729,9 +767,9 @@ while modulo != "0":
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
                         print()
-                        tipo_acessorio = verificar_letras(
-                            input("Informe o tipo atualizado do acessório: ").strip()
-                        )
+                        tipo_acessorio = input("Informe o tipo atualizado do acessório: ").strip()
+                        while verificar_letras(tipo_acessorio) == False:
+                            tipo_acessorio = input("SOMENTE LETRAS : ").strip()
                         preco = verificar_preco(
                             input("Informe o novo valor para o acessório: R$").strip()
                         )
@@ -748,11 +786,13 @@ while modulo != "0":
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp5 == "4":
                 limpar_terminal()
-                titulo_menu_menor("EXCLUIR ACESSÓRIO")
+                print(rosa_inicio+"--------------------------------"+rosa_final)
+                print(rosa_inicio+"|      EXCLUIR ACESSÓRIO       |"+rosa_final)
+                print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = verificar_letras(
-                    input("Busque pelo acessório: ").strip().lower()
-                )
+                busca = ("Busque pelo acessório: ").strip().lower()
+                while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["acessorios"]:
                     if busca in produtos["acessorios"][codigo][0].lower():
@@ -795,12 +835,14 @@ while modulo != "0":
                 break
     while modulo == "3":
         limpar_terminal()
-        titulo_menu_maior("MÓDULO DE VENDAS")
+        print(rosa_inicio+"------------------------------------"+rosa_final)
+        print(rosa_inicio+"|          MÓDULO DE VENDAS        |"+rosa_final)
+        print(rosa_inicio+"------------------------------------"+rosa_final)
         print("|| 1- Adicionar venda✅           ||")
         print("|| 2- Visualizar vendasℹ️          ||")
         print("|| 3- Editar venda🔁              ||")
         print("|| 4- Excluir uma venda🗑️          ||")
-        print(" \  0- Voltar🔙                     /")
+        print(" \  0- Voltar🔙                    /")
         print("  ---------------------------------")
         resp6 = input("Informe a opção desejada: ").strip()
         resp6_validas = ["0", "1", "2", "3", "4"]
@@ -808,7 +850,10 @@ while modulo != "0":
             resp6 = input("Informe uma opção válida: ").strip()
         if resp6 == "1":
             limpar_terminal()
-            titulo_menu_menor("ADICIONAR VENDA")
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|       ADICIONAR VENDA        |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            # titulo_menu_menor("ADICIONAR VENDA")
             print()
             id_venda = verificar_numeros(input("Informe o ID da venda: ").strip())
             if id_venda not in vendas:
@@ -819,11 +864,11 @@ while modulo != "0":
                     cpf_cliente = input("Informe um CPF válido: ").strip()
                 if cpf_cliente in clientes:
                     nome = clientes[cpf_cliente][0]
-                    dia_da_compra = validar_data(
-                        input(
+                    dia_da_compra = input(
                             "Informe a data da compra no formato DD/MM/AAAA: "
                         ).strip()
-                    )
+                    while validar_data(dia_da_compra) == False:
+                        dia_da_compra = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
                     codigo = verificar_numeros(
                         input("Informe o código do produto: ").strip()
                     )
@@ -903,10 +948,12 @@ while modulo != "0":
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp6 == "2":
             limpar_terminal()
-            titulo_menu_menor("VIZUALIZAR VENDAS")
-            busca = verificar_letras(
-                input("Busque a venda pelo o nome do cliente: ").strip().lower()
-            )
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|      VISUALIZAR VENDAS       |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            busca = input("Busque a venda pelo o nome do cliente: ").strip().lower()
+            while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for id in vendas:
                 if busca in vendas[id][0].lower():
@@ -938,10 +985,12 @@ while modulo != "0":
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp6 == "3":
             limpar_terminal()
-            titulo_menu_menor("EDITAR VENDA")
-            busca = verificar_letras(
-                input("Busque a venda pelo o nome do cliente: ").strip().lower()
-            )
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|        EDITAR VENDA          |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            busca = input("Busque a venda pelo o nome do cliente: ").strip().lower()
+            while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for id in vendas:
                 if busca in vendas[id][0].lower():
@@ -971,6 +1020,8 @@ while modulo != "0":
                     dia_da_compra = input(
                         "Informe a data  CORRETA da compra no formato DD/MM/AAAA: "
                     ).strip()
+                    while validar_data(dia_da_compra) == False:
+                        dia_da_compra = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
                     codigo = verificar_numeros(
                         input("Informe o código CORRETO do produto: ").strip()
                     )
@@ -1020,11 +1071,13 @@ while modulo != "0":
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp6 == "4":
             limpar_terminal()
-            titulo_menu_menor("EXCLUIR VENDA")
+            print(rosa_inicio+"--------------------------------"+rosa_final)
+            print(rosa_inicio+"|         EXCLUIR VENDA        |"+rosa_final)
+            print(rosa_inicio+"--------------------------------"+rosa_final)
             print()
-            busca = verificar_letras(
-                input("Busque pelo nome do cliente: ").strip().lower()
-            )
+            busca = input("Busque pelo nome do cliente: ").strip().lower()
+            while verificar_letras(busca) == False:
+                    busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for id in vendas:
                 if busca in vendas[id][0].lower():
@@ -1071,7 +1124,9 @@ while modulo != "0":
             break
     while modulo == "4":
         limpar_terminal()
-        titulo_menu_maior("MÓDULO DE RELATÓRIOS")
+        print(rosa_inicio+"------------------------------------"+rosa_final)
+        print(rosa_inicio+"|        MÓDULO DE RELATÓRIOS      |"+rosa_final)
+        print(rosa_inicio+"------------------------------------"+rosa_final)
         print("|| 1- Lista dos produtos          ||")
         print("|| 2- Lista de vendas             ||")
         print("|| 3- Lista de clientes           ||")
@@ -1087,17 +1142,17 @@ while modulo != "0":
             break
         else:
             print()
-            print("\033[1;31;45m-----------------------------------\033[m")
-            print("\033[1;31;45m|    FUNÇÃO EM DESENVOLVIMENTO⚠️   |\033[m")
-            print("\033[1;31;45m-----------------------------------\033[m")
+            print(rosa_inicio+"-----------------------------------"+rosa_final)
+            print(rosa_inicio+"|    FUNÇÃO EM DESENVOLVIMENTO⚠️   |"+rosa_final)
+            print(rosa_inicio+"-----------------------------------"+rosa_final)
             print()
             input("APERTE ENTER PARA PROSSEGUIR")
 
     if modulo == "5":
         limpar_terminal()
-        print("\033[1;31;45m-------------------------------------------\033[m")
-        print("\033[1;31;45m|               SOBRE O SISTEMA           |\033[m")
-        print("\033[1;31;45m-------------------------------------------\033[m")
+        print(rosa_inicio+"-------------------------------------------"+rosa_final)
+        print(rosa_inicio+"|               SOBRE O SISTEMA           |"+rosa_final)
+        print(rosa_inicio+"-------------------------------------------"+rosa_final)
         print("|| PROGRAMA PARA GESTÃO DE LOJA FEMININA ||")
         print("||           DESENVOLVIDO POR:           ||")
         print("|| 1- hadrianus.lima.130@ufrn.edu.br     ||")
