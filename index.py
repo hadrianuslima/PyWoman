@@ -1,5 +1,5 @@
 import pickle
-from validacoes import validar_cpf , validar_data , verificar_preco , verificar_letras , verificar_numeros , limpar_terminal
+from validacoes import validar_cpf , validar_data , verificar_preco , verificar_letras , verificar_numeros , limpar_terminal, validar_fone
 
 
 def recuperar_clientes():
@@ -39,7 +39,7 @@ def recuperar_clientes():
     arq_clientes.close()
     return clientes
 
-def recuparar_produtos():
+def recuperar_produtos():
     try:
         arq_produtos = open("produtos.dat", "rb")
         produtos = pickle.load(arq_produtos)
@@ -68,7 +68,7 @@ def recuparar_produtos():
     arq_produtos.close()
     return produtos
 
-def recuprar_vendas():
+def recuperar_vendas():
     try:
         arq_vendas = open("vendas.dat", "rb")
         vendas = pickle.load(arq_vendas)
@@ -105,22 +105,22 @@ def recuprar_vendas():
 
 def gravar_clientes(clientes_loja):
     arq_clientes = open("clientes.dat", "wb")
-    pickle.dump(clientes, arq_clientes)
+    pickle.dump(clientes_loja, arq_clientes)
     arq_clientes.close()
 
 def gravar_produtos(produtos_loja):
     arq_produtos = open("produtos.dat", "wb")
-    pickle.dump(produtos, arq_produtos)
+    pickle.dump(produtos_loja, arq_produtos)
     arq_produtos.close()
     
 def gravar_vendas(vendas_loja):
     arq_vendas = open("vendas.dat", "wb")
-    pickle.dump(vendas, arq_vendas)
+    pickle.dump(vendas_loja, arq_vendas)
     arq_vendas.close()
 
 clientes = recuperar_clientes()
-produtos = recuparar_produtos()
-vendas = recuprar_vendas()
+produtos = recuperar_produtos()
+vendas = recuperar_vendas()
 
 rosa_inicio = "\033[1;31;45m"
 rosa_final = "\033[m"
@@ -170,9 +170,9 @@ while modulo != "0":
                 nome = input("Informe o nome do cliente: ").strip().capitalize()
                 while verificar_letras(nome) == False:
                     nome = input("Informe o nome CORRETO do cliente : ").strip().capitalize()
-                fone = verificar_numeros(
-                    input("Informe o número do telefone do cliente: ").strip()
-                )
+                fone = input("Informe o número do telefone do cliente: ").strip()
+                while validar_fone(fone) == False:
+                    fone = input("Informe o número válido: ").strip()
                 data_nasc = input("Informe a data de nascimento do cliente no formato DD/MM/AAAA: ").strip()
 
                 while validar_data(data_nasc) == False:
@@ -242,9 +242,7 @@ while modulo != "0":
             ):  # Usei como forma de informar se não há cliente relacionado a pesquisa
                 print("Cliente não encontrado!")
             else:
-                cpf_cliente = validar_cpf(
-                    input("Informe o CPF do cliente que deseja editar: ").strip()
-                )
+                cpf_cliente = input("Informe o CPF do cliente que deseja editar: ").strip()
                 while validar_cpf(cpf_cliente) == False:
                     cpf_cliente = input("Informe um CPF válido: ").strip()
                 if cpf_cliente in clientes:
@@ -259,9 +257,9 @@ while modulo != "0":
                         ).strip()
                     while validar_data(data_nasc) == False:
                         data_nasc = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
-                    fone = verificar_numeros(
-                        input("Informe o novo número telefone cliente: ").strip()
-                    )
+                    fone = input("Informe o novo número telefone cliente: ").strip()
+                    while validar_fone(fone) == False:
+                        fone = input("Informe um número válido: ").strip()
                     clientes[cpf_cliente][0] = nome
                     clientes[cpf_cliente][3] = data_nasc
                     clientes[cpf_cliente][1] = fone
@@ -294,9 +292,7 @@ while modulo != "0":
             if achou != "S":
                 print("Cliente não encontrado!")
             else:
-                cpf_cliente = validar_cpf(
-                    input("Informe o CPF do cliente que deseja excluir: ").strip()
-                )
+                cpf_cliente = input("Informe o CPF do cliente que deseja excluir: ").strip()
                 while validar_cpf(cpf_cliente) == False:
                     cpf_cliente = input("Informe um CPF válido: ").strip()
                 if cpf_cliente in clientes:
@@ -361,7 +357,9 @@ while modulo != "0":
                 print(rosa_inicio+"|       CADASTRAR PEÇA         |"+rosa_final)
                 print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                codigo = verificar_numeros(input("Informe o código da peça: ").strip())
+                codigo = input("Informe o código da peça: ").strip()
+                while verificar_numeros(codigo) == False:
+                    codigo = input("APENAS NÚMEROS: ").strip()
                 if not (codigo in produtos["roupas"]):
                     tipo_peca = input("Informe o tipo de peça: ").strip()
                     while verificar_letras(tipo_peca) == False:
@@ -370,15 +368,15 @@ while modulo != "0":
                     cor = input("Informe a cor da peça: ").strip()
                     while verificar_letras(cor) == False:
                         cor = input("SOMENTE LETRAS : ").strip()
-                    preco = verificar_preco(
-                        input("Informe o valor da peça: R$").strip()
-                    )
+                    preco = input("Informe o valor da peça: R$").strip()
+                    while verificar_preco(preco) == False:
+                        preco = input("Informe o valor da peça de forma correta: R$").strip()
                     produtos["roupas"][codigo] = [
                         tipo_peca,
                         tamanho,
                         codigo,
                         cor,
-                        preco,
+                        float(preco),
                     ]  # Add peça de roupa dentro do dicionario de roupas que esta dentro do dicionario de produtos
                     print()
                     print("--------------------------------")
@@ -434,9 +432,9 @@ while modulo != "0":
                 if achou != "S":
                     print("Esse produto não está cadastrado!")
                 else:
-                    codigo = verificar_numeros(
-                        input("Informe o código da peça: ").strip()
-                    )
+                    codigo = input("Informe o código da peça: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     if codigo in produtos["roupas"]:
                         print(f"TIPO: {produtos['roupas'][codigo][0]}")
                         print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
@@ -449,15 +447,15 @@ while modulo != "0":
                         while verificar_letras(tipo_peca) == False:
                             tipo_peca = input("SOMENTE LETRAS : ").strip()
                         tamanho = input("Informe o TAMANHO atualizado da peça: ").strip()
-                        preco = verificar_preco(
-                            input("Informe o novo VALOR da peça: R$").strip()
-                        )
+                        preco = input("Informe o novo VALOR da peça: R$").strip()
+                        while verificar_preco(preco) == False:
+                            preco = input("Informe o valor da peça de forma correta: R$").strip()
                         produtos["roupas"][codigo] = [
                             tipo_peca,
                             tamanho,
                             codigo,
                             cor,
-                            preco,
+                            float(preco)
                         ]
                         print()
                         print("--------------------------------")
@@ -486,9 +484,9 @@ while modulo != "0":
                 if achou != "S":
                     print("Nenhum produto encontrado!")
                 else:
-                    codigo = verificar_numeros(
-                        input("Informe o código da peça: ").strip()
-                    )
+                    codigo = input("Informe o código da peça: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     if codigo in produtos["roupas"]:
                         print(f"TIPO: {produtos['roupas'][codigo][0]}")
                         print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
@@ -535,19 +533,18 @@ while modulo != "0":
                 print(rosa_inicio+"--------------------------------"+rosa_final)
                 print(rosa_inicio+"|     CADASTRAR COSMÉTICOS     |"+rosa_final)
                 print(rosa_inicio+"--------------------------------"+rosa_final)
-                #titulo_menu_menor("CADASTRAR COSMÉTICO")
                 print()
-                codigo = verificar_numeros(
-                    input("Informe o código do cosmético: ").strip()
-                )
+                codigo = input("Informe o código do cosmético: ").strip()
+                while verificar_numeros(codigo) == False:
+                    codigo = input("APENAS NÚMEROS: ").strip()
                 if not (codigo in produtos["cosmeticos"]):
                     tipo_cosmetico = input("Informe o tipo do cosmético: ").strip()
-                    while verificar_letras(tipo_acessorio) == False:
-                        tipo_acessorio = input("SOMENTE LETRAS : ").strip()
-                    preco = verificar_preco(
-                        input("Informe o valor do cosmético: R$").strip()
-                    )
-                    produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
+                    while verificar_letras(tipo_cosmetico) == False:
+                        tipo_cosmetico = input("SOMENTE LETRAS : ").strip()
+                    preco = input("Informe o valor do cosmético: R$").strip()
+                    while verificar_preco(preco) == False:
+                        preco = input("Informe o valor do cosmético de forma correta: R$").strip()
+                    produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, float(preco)]
                     print()
                     print("--------------------------------")
                     print("|     COSMÉTICO CADASTRADO✅   |")
@@ -601,9 +598,9 @@ while modulo != "0":
                 if achou != "S":
                     print("Produto não encontrado!")
                 else:
-                    codigo = verificar_numeros(
-                        input("Informe o código do cosmético: ").strip()
-                    )
+                    codigo = input("Informe o código do cosmético: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     print()
                     if codigo in produtos["cosmeticos"]:
                         print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
@@ -612,10 +609,10 @@ while modulo != "0":
                         tipo_cosmetico = input("Informe o TIPO atualizado do cosmético: ").strip()
                         while verificar_letras(tipo_cosmetico) == False:
                             tipo_cosmetico = input("SOMENTE LETRAS : ").strip()
-                        preco = verificar_preco(
-                            input("Informe o novo VALOR para o cosmético: R$").strip()
-                        )
-                        produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, preco]
+                        preco = input("Informe o novo VALOR para o cosmético: R$").strip()
+                        while verificar_preco(preco) == False:
+                            preco = input("Informe o valor do cosmético de forma correta: R$").strip()
+                        produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, float(preco)]
                         print()
                         print("--------------------------------")
                         print("|       DADOS ATUALIZADOS✅    |")
@@ -647,7 +644,9 @@ while modulo != "0":
                 if achou != "S":
                     print("Produto não encontrado!")
                 else:
-                    codigo = verificar_numeros(input("CÓDIGO: ").strip())
+                    codigo = input("CÓDIGO: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     if codigo in produtos["cosmeticos"]:
                         print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
@@ -694,17 +693,17 @@ while modulo != "0":
                 print(rosa_inicio+"|     CADASTRAR ACESSÓRIO      |"+rosa_final)
                 print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                codigo = verificar_numeros(
-                    input("Informe o código do acessório: ").strip()
-                )
+                codigo = input("Informe o código do acessório: ").strip()
+                while verificar_numeros(codigo) == False:
+                    codigo = input("APENAS NÚMEROS: ").strip()
                 if not (codigo in produtos["acessorios"]):
                     tipo_acessorio = input("Informe o tipo do acessório: ").strip()
                     while verificar_letras(tipo_acessorio) == False:
                         tipo_acessorio = input("SOMENTE LETRAS : ").strip()
-                    preco = verificar_preco(
-                        input("Informe o valor do acessório: R$").strip()
-                    )
-                    produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
+                    preco = input("Informe o valor do acessório: R$").strip()
+                    while verificar_preco(preco) == False:
+                        preco = input("Informe o valor do acessório de forma correta: R$").strip()
+                    produtos["acessorios"][codigo] = [tipo_acessorio, codigo, float(preco)]
                     print()
                     print("--------------------------------")
                     print("|     ACESSÓRIO CADASTRADO✅   |")
@@ -758,9 +757,9 @@ while modulo != "0":
                 if achou != "S":
                     print("Produto não encontrado!")
                 else:
-                    codigo = verificar_numeros(
-                        input("Informe o código do acessório: ").strip()
-                    )
+                    codigo = input("Informe o código do acessório: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     if codigo in produtos["acessorios"]:
                         print()
                         print(f"TIPO: {produtos['acessorios'][codigo][0]}")
@@ -770,10 +769,10 @@ while modulo != "0":
                         tipo_acessorio = input("Informe o tipo atualizado do acessório: ").strip()
                         while verificar_letras(tipo_acessorio) == False:
                             tipo_acessorio = input("SOMENTE LETRAS : ").strip()
-                        preco = verificar_preco(
-                            input("Informe o novo valor para o acessório: R$").strip()
-                        )
-                        produtos["acessorios"][codigo] = [tipo_acessorio, codigo, preco]
+                        preco = input("Informe o novo valor para o acessório: R$").strip()
+                        while verificar_preco(preco) == False:
+                            preco = input("Informe o valor do acessório de forma correta: R$").strip()
+                        produtos["acessorios"][codigo] = [tipo_acessorio, codigo, float(preco)]
                         print()
                         print("--------------------------------")
                         print("|       DADOS ATUALIZADOS✅    |")
@@ -790,7 +789,7 @@ while modulo != "0":
                 print(rosa_inicio+"|      EXCLUIR ACESSÓRIO       |"+rosa_final)
                 print(rosa_inicio+"--------------------------------"+rosa_final)
                 print()
-                busca = ("Busque pelo acessório: ").strip().lower()
+                busca = input("Busque pelo acessório: ").strip().lower()
                 while verificar_letras(busca) == False:
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
@@ -805,7 +804,9 @@ while modulo != "0":
                 if achou != "S":
                     print("Produto não encontrado!")
                 else:
-                    codigo = verificar_numeros(input("CÓDIGO: ").strip())
+                    codigo = input("CÓDIGO: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     if codigo in produtos["acessorios"]:
                         print()
                         print(f"TIPO: {produtos['acessorios'][codigo][0]}")
@@ -855,11 +856,11 @@ while modulo != "0":
             print(rosa_inicio+"--------------------------------"+rosa_final)
             # titulo_menu_menor("ADICIONAR VENDA")
             print()
-            id_venda = verificar_numeros(input("Informe o ID da venda: ").strip())
+            id_venda = input("Informe o ID da venda: ").strip()
+            while verificar_numeros(id_venda) == False:
+                id_venda = input("APENAS NÚMEROS: ").strip()
             if id_venda not in vendas:
-                cpf_cliente = validar_cpf(
-                    input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
-                )
+                cpf_cliente = input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
                 while validar_cpf(cpf_cliente) == False:
                     cpf_cliente = input("Informe um CPF válido: ").strip()
                 if cpf_cliente in clientes:
@@ -869,9 +870,9 @@ while modulo != "0":
                         ).strip()
                     while validar_data(dia_da_compra) == False:
                         dia_da_compra = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
-                    codigo = verificar_numeros(
-                        input("Informe o código do produto: ").strip()
-                    )
+                    codigo = input("Informe o código do produto: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
                     achou = ""
                     for setor in produtos:
                         if codigo in produtos[setor]:
@@ -880,13 +881,17 @@ while modulo != "0":
                             break
                     if achou == "S":
                         preco = 0
-                        quantidade = verificar_numeros(
-                            input(
+                        quantidade = input(
                                 "Informe quantas unidades do produto foram compradas: "
                             ).strip()
-                        )
+                        while verificar_numeros(quantidade) == False:
+                            quantidade = input("APENAS NÚMEROS: ").strip()
                         quantidade = int(quantidade)
-                        preco += produtos[categoria][codigo][4] * quantidade
+                        if categoria == "roupas":
+                            index_preco = 4
+                        else:
+                            index_preco = 2
+                        preco += produtos[categoria][codigo][index_preco] * quantidade
                         vendas[id_venda] = [
                             nome,
                             cpf_cliente,
@@ -899,9 +904,9 @@ while modulo != "0":
                             .upper()
                         )
                         while parar != "N":
-                            codigo = verificar_numeros(
-                                input("Informe o código do produto: ").strip()
-                            )
+                            codigo = input("Informe o código do produto: ").strip()
+                            while verificar_numeros(codigo) == False:
+                                codigo = input("APENAS NÚMEROS: ").strip()
                             achou = ""
                             for setor in produtos:
                                 if codigo in produtos[setor]:
@@ -909,13 +914,17 @@ while modulo != "0":
                                     categoria = setor
                                     break
                             if achou == "S":
-                                quantidade = verificar_numeros(
-                                    input(
+                                quantidade = input(
                                         "Informe quantas unidades do produto foram compradas: "
                                     ).strip()
-                                )
+                                while verificar_numeros(quantidade) == False:
+                                    quantidade = input("APENAS NÚMEROS: ").strip()
                                 quantidade = int(quantidade)
-                                preco += produtos[categoria][codigo][4] * quantidade
+                                if categoria == "roupas":
+                                    index_preco = 4
+                                else:
+                                    index_preco = 2
+                                preco += produtos[categoria][codigo][index_preco] * quantidade
                                 vendas[id_venda][3][codigo] = quantidade
                                 parar = (
                                     input("Deseja adicionar outro produto? [S/N]: ")
@@ -966,9 +975,9 @@ while modulo != "0":
             if achou != "S":
                 print("Venda não encontrada!")
             else:
-                id_venda = verificar_numeros(
-                    input("Informe o ID da venda que deseja visualizar: ").strip()
-                )
+                id_venda = input("Informe o ID da venda que deseja visualizar: ").strip()
+                while verificar_numeros(id_venda) == False:
+                    id_venda = input("APENAS NÚMEROS: ").strip()
                 if id_venda in vendas:
                     print()
                     print(f"NOME: {vendas[id_venda][0]}")
@@ -1003,9 +1012,9 @@ while modulo != "0":
             if achou != "S":
                 print("Venda não encontrada!")
             else:
-                id_venda = verificar_numeros(
-                    input("Informe o ID da venda que deseja editar: ").strip()
-                )
+                id_venda = input("Informe o ID da venda que deseja editar: ").strip()
+                while verificar_numeros(id_venda) == False:
+                    id_venda = input("APENAS NÚMEROS: ").strip()
                 if id_venda in vendas:
                     print()
                     print(f"NOME: {vendas[id_venda][0]}")
@@ -1017,54 +1026,86 @@ while modulo != "0":
                         print(f"{i}: {vendas[id_venda][3][i]}")
                     print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
                     print()
+                    preco = 0
                     dia_da_compra = input(
                         "Informe a data  CORRETA da compra no formato DD/MM/AAAA: "
                     ).strip()
                     while validar_data(dia_da_compra) == False:
                         dia_da_compra = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
-                    codigo = verificar_numeros(
-                        input("Informe o código CORRETO do produto: ").strip()
-                    )
-                    quantidade = verificar_numeros(
-                        input(
-                            "Informe quantas unidades do produto foram compradas: "
-                        ).strip()
-                    )
-                    quantidade = int(quantidade)
-                    vendas[id_venda] = [
-                        vendas[id_venda][0],
-                        vendas[id_venda][1],
-                        dia_da_compra,
-                        {codigo: quantidade},
-                    ]
-                    parar = (
-                        input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                    )
-                    while parar != "N":
-                        codigo = verificar_numeros(
-                            input("Informe o código do produto: ").strip()
-                        )
-                        quantidade = verificar_numeros(
-                            input(
+                    codigo = input("Informe o código CORRETO do produto: ").strip()
+                    while verificar_numeros(codigo) == False:
+                        codigo = input("APENAS NÚMEROS: ").strip()
+                    achou = ""
+                    for setor in produtos:
+                        if codigo in produtos[setor]:
+                            achou = "S"
+                            categoria = setor
+                            break
+                    if achou == "S":
+                        quantidade = input(
                                 "Informe quantas unidades do produto foram compradas: "
                             ).strip()
-                        )
-                        vendas[id_venda][3][codigo] = int(quantidade)
+                        while verificar_numeros(quantidade) == False:
+                            quantidade = input("APENAS NÚMEROS: ").strip()
+                        quantidade = int(quantidade)
+                        if categoria == "roupas":
+                            index_preco = 4
+                        else:
+                            index_preco = 2
+                        preco += produtos[categoria][codigo][index_preco] * quantidade
+                        vendas[id_venda] = [
+                            vendas[id_venda][0],
+                            vendas[id_venda][1],
+                            dia_da_compra,
+                            {codigo: quantidade},
+                        ]
                         parar = (
-                            input("Deseja adicionar outro produto? [S/N]: ")
-                            .strip()
-                            .upper()
+                            input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                         )
-                    preco = verificar_preco(
-                        input("Informe o preço TOTAL CORRETO da compra: R$").strip()
-                    )
-                    vendas[id_venda].append(preco)
-                    print()
-                    print("--------------------------------")
-                    print("|        VENDA EDITADA✅      |")
-                    print("--------------------------------")
-                    print()
-                    print(vendas)  # Verificação
+                        while parar != "N":
+                            codigo = input("Informe o código do produto: ").strip()
+                            while verificar_numeros(codigo) == False:
+                                codigo = input("APENAS NÚMEROS: ").strip()
+                            achou = ""
+                            for setor in produtos:
+                                if codigo in produtos[setor]:
+                                    achou = "S"
+                                    categoria = setor
+                                    break
+                            if achou == "S":
+                                quantidade = input(
+                                        "Informe quantas unidades do produto foram compradas: "
+                                    ).strip()
+                                while verificar_numeros(quantidade) == False:
+                                    quantidade = input("APENAS NÚMEROS: ").strip()
+                                quantidade = int(quantidade)
+                                if categoria == "roupas":
+                                    index_preco = 4
+                                else:
+                                    index_preco = 2
+                                preco += produtos[categoria][codigo][index_preco] * quantidade
+                                vendas[id_venda][3][codigo] = int(quantidade)
+                                parar = (
+                                    input("Deseja adicionar outro produto? [S/N]: ")
+                                    .strip()
+                                    .upper()
+                                )
+                            else:
+                                print("Produto não encontrado!")
+                                parar = (
+                                    input("Deseja adicionar outro produto? [S/N]: ")
+                                    .strip()
+                                    .upper()
+                                )
+                        vendas[id_venda].append(preco)
+                        print()
+                        print("--------------------------------")
+                        print("|        VENDA EDITADA✅      |")
+                        print("--------------------------------")
+                        print()
+                        print(vendas)  # Verificação
+                    else:
+                        print("Produto não encontrado!")
                 else:
                     print("Esse ID não está cadastrado!")
             print()
@@ -1090,9 +1131,9 @@ while modulo != "0":
             if achou != "S":
                 print("Venda não encontrada!")
             else:
-                id_venda = verificar_numeros(
-                    input("Informe o ID da venda que deseja excluir: ").strip()
-                )
+                id_venda = input("Informe o ID da venda que deseja excluir: ").strip()
+                while verificar_numeros(id_venda) == False:
+                    id_venda = input("APENAS NÚMEROS: ").strip()
                 if id_venda in vendas:
                     print()
                     print(f"NOME: {vendas[id_venda][0]}")
