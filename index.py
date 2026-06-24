@@ -6,43 +6,45 @@ def recuperar_clientes():
     try:
         arq_clientes = open("clientes.dat", "rb")
         clientes = pickle.load(arq_clientes)
+        arq_clientes.close()
     except:
         arq_clientes = open("clientes.dat", "wb")
         clientes = {
             # [nome, telefone, cpf, data de nascimento]
-            "12345678901": [
+            "11111111111": [
                 "Hadrianus da Silva Lima",
                 "9999999999",
-                "12345678901",
+                "11111111111",
                 "12/09/2006",
             ],
-            "23456789012": [
+            "22222222222": [
                 "Valeria pereira de medeiros",
                 "8888888888",
-                "23456789012",
+                "22222222222",
                 "04/11/2005",
             ],
-            "34567890123": [
+            "33333333333": [
                 "Marycele saraiva da silva",
                 "7777777777",
-                "34567890123",
+                "33333333333",
                 "24/10/1982",
             ],
-            "45678901234": [
+            "44444444444": [
                 "Roberto alves de lima",
                 "6666666666",
-                "45678901234",
+                "44444444444",
                 "13/11/1982",
             ],
         }
         pickle.dump(clientes, arq_clientes)
-    arq_clientes.close()
+        arq_clientes.close()
     return clientes
 
 def recuperar_produtos():
     try:
         arq_produtos = open("produtos.dat", "rb")
         produtos = pickle.load(arq_produtos)
+        arq_produtos.close()
     except:
         arq_produtos = open("produtos.dat", "wb")
         produtos = {
@@ -65,13 +67,14 @@ def recuperar_produtos():
             },
         }
         pickle.dump(produtos, arq_produtos)
-    arq_produtos.close()
+        arq_produtos.close()
     return produtos
 
 def recuperar_vendas():
     try:
         arq_vendas = open("vendas.dat", "rb")
         vendas = pickle.load(arq_vendas)
+        arq_vendas.close()
     except:
         arq_vendas = open("vendas.dat", "wb")
         vendas = {  # Aqui nesse dicionário eu coloquei um ID para cada venda,
@@ -79,28 +82,28 @@ def recuperar_vendas():
             # um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, e por ultimo o valor total da venda
             "11111": [
                 "Hadrianus da silva lima",
-                "12345678901",
+                "11111111111",
                 "11/11/2011",
                 {"123": 3, "234": 2},
                 1000.00,
             ],
             "22222": [
                 "Valeria pereira de medeiros",
-                "23456789012",
+                "22222222222",
                 "11/11/2011",
                 {"123": 3, "234": 4},
                 1500.00,
             ],
             "33333": [
                 "Marycele saraiva da silva",
-                "34567890123",
+                "33333333333",
                 "12/11/2011",
                 {"234": 6, "345": 9},
                 2000.00,
             ],
         }
         pickle.dump(vendas, arq_vendas)
-    arq_vendas.close()
+        arq_vendas.close()
     return vendas
 
 def gravar_clientes(clientes_loja):
@@ -405,7 +408,7 @@ while modulo != "0":
                         print(f"PEÇA: {produtos['roupas'][codigo][0]}")
                         print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
                         print(f"COR: {produtos['roupas'][codigo][3]}")
-                        print(f"PREÇO: {produtos['roupas'][codigo][4]}")
+                        print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -570,7 +573,7 @@ while modulo != "0":
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
-                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -592,7 +595,7 @@ while modulo != "0":
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
-                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -605,7 +608,7 @@ while modulo != "0":
                     if codigo in produtos["cosmeticos"]:
                         print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
-                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
                         tipo_cosmetico = input("Informe o TIPO atualizado do cosmético: ").strip()
                         while verificar_letras(tipo_cosmetico) == False:
                             tipo_cosmetico = input("SOMENTE LETRAS : ").strip()
@@ -638,7 +641,7 @@ while modulo != "0":
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
-                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -650,7 +653,7 @@ while modulo != "0":
                     if codigo in produtos["cosmeticos"]:
                         print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
-                        print(f"PREÇO: {produtos['cosmeticos'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
                         excluir = (
                             input("Digite S para confirmar a exclusão: ")
                             .strip()
@@ -729,7 +732,7 @@ while modulo != "0":
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
-                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -751,7 +754,7 @@ while modulo != "0":
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
-                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -764,7 +767,7 @@ while modulo != "0":
                         print()
                         print(f"TIPO: {produtos['acessorios'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
-                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                         print()
                         tipo_acessorio = input("Informe o tipo atualizado do acessório: ").strip()
                         while verificar_letras(tipo_acessorio) == False:
@@ -798,7 +801,7 @@ while modulo != "0":
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
-                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                         print("\033[1;32m----------------------------------\033[m")
                         achou = "S"
                 if achou != "S":
@@ -811,7 +814,7 @@ while modulo != "0":
                         print()
                         print(f"TIPO: {produtos['acessorios'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
-                        print(f"PREÇO: {produtos['acessorios'][codigo][2]}")
+                        print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                         print()
                         excluir = (
                             input("Digite S para confirmar a exclusão: ")
@@ -897,6 +900,7 @@ while modulo != "0":
                             cpf_cliente,
                             dia_da_compra,
                             {codigo: quantidade},
+                            preco
                         ]
                         parar = (
                             input("Deseja adicionar outro produto? [S/N]: ")
@@ -926,6 +930,7 @@ while modulo != "0":
                                     index_preco = 2
                                 preco += produtos[categoria][codigo][index_preco] * quantidade
                                 vendas[id_venda][3][codigo] = quantidade
+                                vendas[id_venda][4] = preco
                                 parar = (
                                     input("Deseja adicionar outro produto? [S/N]: ")
                                     .strip()
@@ -939,7 +944,6 @@ while modulo != "0":
                                     .upper()
                                 )
                         print(f"PREÇO TOTAL: R${preco}")
-                        vendas[id_venda].append(preco)
                         print()
                         print("--------------------------------")
                         print("|       VENDA CADASTRADA✅    |")
@@ -987,7 +991,7 @@ while modulo != "0":
                     for i in vendas[id_venda][3]:
                         print("-", end=" ")
                         print(f"{i}: {vendas[id_venda][3][i]}")
-                    print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
+                    print(f"PREÇO TOTAL: R${vendas[id_venda][4]}")
                 else:
                     print("Essa venda não está cadastrada!")
             print()
@@ -1024,7 +1028,7 @@ while modulo != "0":
                     for i in vendas[id_venda][3]:
                         print("-", end=" ")
                         print(f"{i}: {vendas[id_venda][3][i]}")
-                    print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
+                    print(f"PREÇO TOTAL: R${vendas[id_venda][4]}")
                     print()
                     preco = 0
                     dia_da_compra = input(
@@ -1058,6 +1062,7 @@ while modulo != "0":
                             vendas[id_venda][1],
                             dia_da_compra,
                             {codigo: quantidade},
+                            preco
                         ]
                         parar = (
                             input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
@@ -1085,6 +1090,7 @@ while modulo != "0":
                                     index_preco = 2
                                 preco += produtos[categoria][codigo][index_preco] * quantidade
                                 vendas[id_venda][3][codigo] = int(quantidade)
+                                vendas[id_venda][4] = preco
                                 parar = (
                                     input("Deseja adicionar outro produto? [S/N]: ")
                                     .strip()
@@ -1097,7 +1103,6 @@ while modulo != "0":
                                     .strip()
                                     .upper()
                                 )
-                        vendas[id_venda].append(preco)
                         print()
                         print("--------------------------------")
                         print("|        VENDA EDITADA✅      |")
@@ -1143,7 +1148,7 @@ while modulo != "0":
                     for i in vendas[id_venda][3]:
                         print("-", end=" ")
                         print(f"{i}: {vendas[id_venda][3][i]}")
-                    print(f"PREÇO TOTAL: {vendas[id_venda][4]}")
+                    print(f"PREÇO TOTAL: R${vendas[id_venda][4]}")
                     excluir = (
                         input("Digite S para confirmar a exclusão: ").strip().upper()
                     )
