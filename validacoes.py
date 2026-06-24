@@ -46,18 +46,35 @@ def verificar_letras(letras):
         return True
     else:
         return False
+    
+def validar_fone(num):
+    num = num.replace(" ","")
+    num = num.replace("-","")
+    num = num.replace("(","")
+    num = num.replace(")","")
+    tam = len(num)
+    if tam != 11:
+        return False
+    if not num.isdigit():
+        return False
+    ddd = num[0]+num[1]
+    ddd_validos = ["11", "12", "13", "14", "15", "16", "17", "18", "19", "21", "22", "24", "27", "28", "31", "32", "33", "34", "35", "37", "38", "41", "42", "43", "44", "45", "46", "47", "48", "49", "51", "53", "54", "55", "61", "62", "63", "64", "65", "66", "67", "68", "69", "71", "73", "74", "75", "77", "79", "81", "82", "83", "84", "85", "86", "87", "88", "89", "91", "92", "93", "94", "95", "96", "97", "98", "99"]
+    if not (ddd in ddd_validos):
+        return False
+    if num[2] != "9":
+        return False
+    return True
+
 
 def verificar_numeros(numeros):
-    while not numeros.isdigit():
-        numeros = input("APENAS NÚMEROS: ").strip()
-    return numeros
-
+    if numeros.isdigit():
+        return True
+    else:
+        return False
+    
 def verificar_preco(valor):
-    loop = True
-    while loop == True:
-        try:
-            valor = float(valor)
-            return valor
-            loop = False
-        except ValueError:
-            valor = input("INFORME O VALOR DE FORMA CORRETA: R$").strip()
+    try:
+        valor = float(valor)
+        return True
+    except:
+        return False
