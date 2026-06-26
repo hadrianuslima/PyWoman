@@ -1,7 +1,7 @@
 from validacoes import validar_cpf , validar_data , verificar_preco , verificar_letras , verificar_numeros , limpar_terminal, validar_fone
 from modulo_clientes import CRUD_cliente
 from modulo_produtos import CRUD_produto
-from modulos_vendas import CRUD_vendas
+from modulo_vendas import CRUD_vendas
 from modulo_relatorios import relatorios
 from info_sistem import sobre_sistm
 
