@@ -33,9 +33,19 @@ def validar_data(data):
     from datetime import datetime  # Valida de data usando a biblioteca datetime
     try:
         datetime.strptime(data, "%d/%m/%Y")
+        data = data.split("/")
+        if int(data[2]) > datetime.now().year:
+            return False
+        elif int(data[2]) == datetime.now().year:
+            if int(data[1]) > datetime.now().month:
+                return False
+            elif int(data[1]) == datetime.now().month:
+                if int(data[0]) > datetime.now().day:
+                    return False
         return True
     except:
         return False
+
 
 def limpar_terminal():
     import os
