@@ -10,30 +10,34 @@ def recuperar_clientes():
     except:
         arq_clientes = open("clientes.dat", "wb")
         clientes = {
-            # [nome, telefone, cpf, data de nascimento]
+            # [nome, telefone, cpf, data de nascimento, status de atividade]
             "11111111111": [
                 "Hadrianus da Silva Lima",
-                "9999999999",
+                "83999999999",
                 "11111111111",
                 "12/09/2006",
+                True
             ],
             "22222222222": [
                 "Valeria pereira de medeiros",
-                "8888888888",
+                "84988888888",
                 "22222222222",
                 "04/11/2005",
+                True
             ],
             "33333333333": [
                 "Marycele saraiva da silva",
-                "7777777777",
+                "83977777777",
                 "33333333333",
                 "24/10/1982",
+                True
             ],
             "44444444444": [
                 "Roberto alves de lima",
-                "6666666666",
+                "83966666666",
                 "44444444444",
                 "13/11/1982",
+                True
             ],
         }
         pickle.dump(clientes, arq_clientes)
@@ -49,21 +53,21 @@ def recuperar_produtos():
         arq_produtos = open("produtos.dat", "wb")
         produtos = {
             "roupas": {
-                "123": ["blusa", "M", "123", "preto", 50.00],
-                "234": ["vestido", "P", "234", "azul", 70.00],
-                "345": ["calça", "G", "345", "vermelho", 40.00],
-                "456": ["sutiã", "M", "456", "preto", 30.00],
+                "123": ["blusa", "M", "123", "preto", 50.00, True],
+                "234": ["vestido", "P", "234", "azul", 70.00, True],
+                "345": ["calça", "G", "345", "vermelho", 40.00, True],
+                "456": ["sutiã", "M", "456", "preto", 30.00, True],
             },
             "cosmeticos": {
-                "567": ["maquiagem", "567", 70.00],
-                "678": ["perfume", "678", 80.00],
-                "789": ["hidratante", "789", 65.00],
-                "890": ["óleo corporal", "890", 30.50],
+                "567": ["maquiagem", "567", 70.00, True],
+                "678": ["perfume", "678", 80.00, True],
+                "789": ["hidratante", "789", 65.00, True],
+                "890": ["óleo corporal", "890", 30.50, True],
             },
             "acessorios": {
-                "901": ["pulseira", "901", 38.90],
-                "012": ["colar", "012", 79.99],
-                "112": ["óculos", "112", 58.99],
+                "901": ["pulseira", "901", 38.90, True],
+                "012": ["colar", "012", 79.99, True],
+                "112": ["óculos", "112", 58.99, True],
             },
         }
         pickle.dump(produtos, arq_produtos)
@@ -79,13 +83,14 @@ def recuperar_vendas():
         arq_vendas = open("vendas.dat", "wb")
         vendas = {  # Aqui nesse dicionário eu coloquei um ID para cada venda,
             # que recebe uma lista no qual tem o nome do cliente, CPF, data da venda,
-            # um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, e por ultimo o valor total da venda
+            # um dicionário onde tem códigos do produto como chave e sua respectiva quantidade, o valor total da venda , e o status da venda
             "11111": [
                 "Hadrianus da silva lima",
                 "11111111111",
                 "11/11/2011",
                 {"123": 3, "234": 2},
                 1000.00,
+                True
             ],
             "22222": [
                 "Valeria pereira de medeiros",
@@ -93,6 +98,7 @@ def recuperar_vendas():
                 "11/11/2011",
                 {"123": 3, "234": 4},
                 1500.00,
+                True
             ],
             "33333": [
                 "Marycele saraiva da silva",
@@ -100,6 +106,7 @@ def recuperar_vendas():
                 "12/11/2011",
                 {"234": 6, "345": 9},
                 2000.00,
+                True
             ],
         }
         pickle.dump(vendas, arq_vendas)
@@ -169,6 +176,9 @@ while modulo != "0":
             cpf_cliente = input("Informe o CPF do cliente no formato XXX.XXX.XXX-XX: ").strip()
             while validar_cpf(cpf_cliente) == False:
                 cpf_cliente = input("Informe um CPF válido: ").strip()
+            cpf_cliente = cpf_cliente.replace('.', '')
+            cpf_cliente = cpf_cliente.replace('-', '')
+            cpf_cliente = cpf_cliente.replace(' ', '')
             if not (cpf_cliente in clientes):
                 nome = input("Informe o nome do cliente: ").strip().capitalize()
                 while verificar_letras(nome) == False:
@@ -176,6 +186,10 @@ while modulo != "0":
                 fone = input("Informe o número do telefone do cliente: ").strip()
                 while validar_fone(fone) == False:
                     fone = input("Informe o número válido: ").strip()
+                fone = fone.replace(" ","")
+                fone = fone.replace("-","")
+                fone = fone.replace("(","")
+                fone = fone.replace(")","")
                 data_nasc = input("Informe a data de nascimento do cliente no formato DD/MM/AAAA: ").strip()
 
                 while validar_data(data_nasc) == False:
@@ -186,6 +200,7 @@ while modulo != "0":
                     fone,
                     cpf_cliente,
                     data_nasc,
+                    True
                 ]  # Add cliente no dicionário de clientes
                 print()
                 print("--------------------------------")
@@ -193,6 +208,23 @@ while modulo != "0":
                 print("--------------------------------")
                 print()
                 print(clientes)
+            elif (cpf_cliente in clientes) and clientes[cpf_cliente][4] == False:
+                print("\033[1;32m----------------------------------\033[m")
+                print(f"CPF: {clientes[cpf_cliente][2]}")
+                print(f"NOME: {clientes[cpf_cliente][0]}")
+                print(f"TELEFONE: {clientes[cpf_cliente][1]}")
+                print(f"DATA DE NASCIMENTO: {clientes[cpf_cliente][3]}")
+                print("\033[1;32m----------------------------------\033[m")
+                reativacao = input("Deseja reativar o cadastro desse cliente? [S/N]: ").strip().upper()
+                while verificar_letras(reativacao) == False:
+                    reativacao = input("APENAS LETRAS! [S/N]: ").strip().upper()
+                if reativacao == "S":
+                    clientes[cpf_cliente][4] = True
+                    print("--------------------------------")
+                    print("|      CLIENTE CADASTRADO ✅   |")
+                    print("--------------------------------")
+                else:
+                    print("Cadastro cancelado!")
             else:
                 print("Esse CPF já está cadastrado!")
             print()
@@ -208,7 +240,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for i in clientes:
-                if busca in clientes[i][0].lower():
+                if busca in clientes[i][0].lower() and clientes[i][4] == True:
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"CPF: {clientes[i][2]}")
                     print(f"NOME: {clientes[i][0]}")
@@ -234,7 +266,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS: ").strip().lower()
             achou = ""
             for i in clientes:
-                if busca in clientes[i][0].lower():
+                if busca in clientes[i][0].lower() and clientes[i][4] == True:
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"CPF: {clientes[i][2]}")
                     print(f"NOME: {clientes[i][0]}")
@@ -286,7 +318,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for i in clientes:
-                if busca in clientes[i][0].lower():
+                if busca in clientes[i][0].lower() and clientes[i][4] == True:
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"CPF: {clientes[i][2]}")
                     print(f"NOME: {clientes[i][0]}")
@@ -307,7 +339,8 @@ while modulo != "0":
                         input("Digite S para excluir o cadastro: ").strip().upper()
                     )
                     if excluir == "S":
-                        del clientes[cpf_cliente]
+                        clientes[cpf_cliente][4] = False
+                       # del clientes[cpf_cliente]
                         print("--------------------------------")
                         print("|       CADASTRO EXCLUÍDO✅    |")
                         print("--------------------------------")
@@ -380,6 +413,7 @@ while modulo != "0":
                         codigo,
                         cor,
                         float(preco),
+                        True
                     ]  # Add peça de roupa dentro do dicionario de roupas que esta dentro do dicionario de produtos
                     print()
                     print("--------------------------------")
@@ -387,6 +421,22 @@ while modulo != "0":
                     print("--------------------------------")
                     print()
                     print(produtos["roupas"])  # Verificação
+                elif (codigo in produtos["roupas"]) and (produtos["roupas"][codigo][5] == False):
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
+                    print(f"PEÇA: {produtos['roupas'][codigo][0]}")
+                    print(f"TAMANHO: {produtos['roupas'][codigo][1]}")
+                    print(f"COR: {produtos['roupas'][codigo][3]}")
+                    print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    reativacao = input("Deseja recuperar os dados desse produto? [S/N]: ").strip().upper()
+                    if reativacao == "S":
+                        produtos["roupas"][codigo][5] = True
+                        print("--------------------------------")
+                        print("|       PEÇA CADASTRADA✅      |")
+                        print("--------------------------------")
+                    else:
+                        print("Recadastro cancelado!")
                 else:
                     print("Esse código de barras já está cadastrado!")
                 print()
@@ -402,7 +452,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["roupas"]:
-                    if busca in produtos["roupas"][codigo][0].lower():
+                    if busca in produtos["roupas"][codigo][0].lower() and produtos["roupas"][codigo][5] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
                         print(f"PEÇA: {produtos['roupas'][codigo][0]}")
@@ -426,7 +476,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["roupas"]:
-                    if busca in produtos["roupas"][codigo][0].lower():
+                    if busca in produtos["roupas"][codigo][0].lower() and produtos["roupas"][codigo][5] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
                         print(f"PEÇA: {produtos['roupas'][codigo][0]}")
@@ -458,7 +508,8 @@ while modulo != "0":
                             tamanho,
                             codigo,
                             cor,
-                            float(preco)
+                            float(preco),
+                            True
                         ]
                         print()
                         print("--------------------------------")
@@ -478,7 +529,7 @@ while modulo != "0":
                 busca = input("Busque pela peça de deseja excluir: ").strip().lower()
                 achou = ""
                 for codigo in produtos["roupas"]:
-                    if busca in produtos["roupas"][codigo][0].lower():
+                    if busca in produtos["roupas"][codigo][0].lower() and produtos["roupas"][codigo][5] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
                         print(f"PEÇA: {produtos['roupas'][codigo][0]}")
@@ -502,7 +553,8 @@ while modulo != "0":
                             .upper()
                         )
                         if excluir == "S":
-                            del produtos["roupas"][codigo]
+                            produtos["roupas"][codigo][5] = False
+                            #del produtos["roupas"][codigo]
                             print("--------------------------------")
                             print("|        PEÇA EXCLUÍDA✅        |")
                             print("--------------------------------")
@@ -547,13 +599,28 @@ while modulo != "0":
                     preco = input("Informe o valor do cosmético: R$").strip()
                     while verificar_preco(preco) == False:
                         preco = input("Informe o valor do cosmético de forma correta: R$").strip()
-                    produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, float(preco)]
+                    produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, float(preco), True]
                     print()
                     print("--------------------------------")
                     print("|     COSMÉTICO CADASTRADO✅   |")
                     print("--------------------------------")
                     print()
                     print(produtos["cosmeticos"])  # Vericação
+                elif (codigo in produtos["cosmeticos"]) and (produtos["cosmeticos"][codigo][3] == False):
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
+                    print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
+                    print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    reativacao = input("Deseja recadastrar esse produto? [S/N]: ").strip().upper()
+                    if reativacao == "S":
+                        produtos["cosmeticos"][codigo][3] = True
+                        print("--------------------------------")
+                        print("|     COSMÉTICO CADASTRADO✅   |")
+                        print("--------------------------------")
+                        print(produtos["cosmeticos"])
+                    else:
+                        print("Recadastro cancelado!")
                 else:
                     print("Esse código já está cadastrado!")
                 print()
@@ -569,7 +636,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["cosmeticos"]:
-                    if busca in produtos["cosmeticos"][codigo][0].lower():
+                    if busca in produtos["cosmeticos"][codigo][0].lower() and produtos["cosmeticos"][codigo][3] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
@@ -591,7 +658,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["cosmeticos"]:
-                    if busca in produtos["cosmeticos"][codigo][0].lower():
+                    if busca in produtos["cosmeticos"][codigo][0].lower() and produtos["cosmeticos"][codigo][3] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
@@ -615,7 +682,7 @@ while modulo != "0":
                         preco = input("Informe o novo VALOR para o cosmético: R$").strip()
                         while verificar_preco(preco) == False:
                             preco = input("Informe o valor do cosmético de forma correta: R$").strip()
-                        produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, float(preco)]
+                        produtos["cosmeticos"][codigo] = [tipo_cosmetico, codigo, float(preco), True]
                         print()
                         print("--------------------------------")
                         print("|       DADOS ATUALIZADOS✅    |")
@@ -637,7 +704,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["cosmeticos"]:
-                    if busca in produtos["cosmeticos"][codigo][0].lower():
+                    if busca in produtos["cosmeticos"][codigo][0].lower() and produtos["cosmeticos"][codigo][3] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"COSMÉTICO: {produtos['cosmeticos'][codigo][0]}")
@@ -661,7 +728,8 @@ while modulo != "0":
                         )
                         print()
                         if excluir == "S":
-                            del produtos["cosmeticos"][codigo]
+                            produtos["cosmeticos"][codigo][3] = False
+                            #del produtos["cosmeticos"][codigo]
                             print("--------------------------------")
                             print("|      COSMÉTICO EXCLUÍDO✅    |")
                             print("--------------------------------")
@@ -706,15 +774,29 @@ while modulo != "0":
                     preco = input("Informe o valor do acessório: R$").strip()
                     while verificar_preco(preco) == False:
                         preco = input("Informe o valor do acessório de forma correta: R$").strip()
-                    produtos["acessorios"][codigo] = [tipo_acessorio, codigo, float(preco)]
+                    produtos["acessorios"][codigo] = [tipo_acessorio, codigo, float(preco), True]
                     print()
                     print("--------------------------------")
                     print("|     ACESSÓRIO CADASTRADO✅   |")
                     print("--------------------------------")
                     print()
                     print(produtos["acessorios"])  # Verificação
+                elif (codigo in produtos["acessorios"]) and (produtos["acessorios"][codigo][3] == False):
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
+                    print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
+                    print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
+                    print("\033[1;32m----------------------------------\033[m")
+                    reativacao = input("Deseja recadastrar esse produto? [S/N]: ").strip().upper()
+                    if reativacao == "S":
+                        produtos["acessorios"][codigo][3] = True
+                        print("--------------------------------")
+                        print("|     ACESSÓRIO CADASTRADO✅   |")
+                        print("--------------------------------")
+                    else:
+                        print("Recadastro cancelado!")
                 else:
-                    print("Esse código já está cadastrado!")
+                        print("Esse código já está cadastrado!")
                 print()
                 input("APERTE ENTER PARA PROSSEGUIR")
             elif resp5 == "2":
@@ -728,7 +810,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["acessorios"]:
-                    if busca in produtos["acessorios"][codigo][0].lower():
+                    if busca in produtos["acessorios"][codigo][0].lower() and produtos["acessorios"][codigo][3] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
@@ -750,7 +832,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["acessorios"]:
-                    if busca in produtos["acessorios"][codigo][0].lower():
+                    if busca in produtos["acessorios"][codigo][0].lower() and produtos["acessorios"][codigo][3] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
@@ -775,7 +857,7 @@ while modulo != "0":
                         preco = input("Informe o novo valor para o acessório: R$").strip()
                         while verificar_preco(preco) == False:
                             preco = input("Informe o valor do acessório de forma correta: R$").strip()
-                        produtos["acessorios"][codigo] = [tipo_acessorio, codigo, float(preco)]
+                        produtos["acessorios"][codigo] = [tipo_acessorio, codigo, float(preco), True]
                         print()
                         print("--------------------------------")
                         print("|       DADOS ATUALIZADOS✅    |")
@@ -797,7 +879,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
                 achou = ""
                 for codigo in produtos["acessorios"]:
-                    if busca in produtos["acessorios"][codigo][0].lower():
+                    if busca in produtos["acessorios"][codigo][0].lower() and produtos["acessorios"][codigo][3] == True:
                         print("\033[1;32m----------------------------------\033[m")
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
@@ -822,7 +904,8 @@ while modulo != "0":
                             .upper()
                         )
                         if excluir == "S":
-                            del produtos["acessorios"][codigo]
+                            produtos["acessorios"][codigo][3] = False
+                            #del produtos["acessorios"][codigo]
                             print()
                             print("--------------------------------")
                             print("|      ACESSÓRIO EXCLUÍDO✅    |")
@@ -900,7 +983,8 @@ while modulo != "0":
                             cpf_cliente,
                             dia_da_compra,
                             {codigo: quantidade},
-                            preco
+                            preco,
+                            True
                         ]
                         parar = (
                             input("Deseja adicionar outro produto? [S/N]: ")
@@ -955,6 +1039,20 @@ while modulo != "0":
                 else:
                     print("Esse cliente não está cadastrado no loja!")
                     print("Por favor realize o cadastro do cliente primeiro!")
+            elif (id_venda in vendas) and (vendas[id_venda][5] == False):
+                print("\033[1;32m----------------------------------\033[m")
+                print(f"NOME: {vendas[id_venda][0]}")
+                print(f"DATA DA VENDA: {vendas[id_venda][2]}")
+                print(f"ID DA VENDA: {id_venda}")
+                print("\033[1;32m----------------------------------\033[m")
+                reativacao = input("Deseja reativar essa venda? [S/N]: ").strip().upper()
+                if reativacao == "S":
+                    vendas[id_venda][5] = True
+                    print("--------------------------------")
+                    print("|       VENDA CADASTRADA✅    |")
+                    print("--------------------------------")
+                else:
+                    print("Reativação cancelada!")
             else:
                 print("Esse ID já está cadastrado!")
             print()
@@ -969,7 +1067,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for id in vendas:
-                if busca in vendas[id][0].lower():
+                if busca in vendas[id][0].lower() and vendas[id][5] == True:
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"NOME: {vendas[id][0]}")
                     print(f"DATA DA VENDA: {vendas[id][2]}")
@@ -1006,7 +1104,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for id in vendas:
-                if busca in vendas[id][0].lower():
+                if busca in vendas[id][0].lower() and vendas[id][5] == True:
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"NOME: {vendas[id][0]}")
                     print(f"DATA DA VENDA: {vendas[id][2]}")
@@ -1062,7 +1160,8 @@ while modulo != "0":
                             vendas[id_venda][1],
                             dia_da_compra,
                             {codigo: quantidade},
-                            preco
+                            preco,
+                            True
                         ]
                         parar = (
                             input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
@@ -1126,7 +1225,7 @@ while modulo != "0":
                     busca = input("SOMENTE LETRAS : ").strip().lower()
             achou = ""
             for id in vendas:
-                if busca in vendas[id][0].lower():
+                if busca in vendas[id][0].lower() and vendas[id][5] == True:
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"NOME: {vendas[id][0]}")
                     print(f"DATA DA VENDA: {vendas[id][2]}")
@@ -1153,7 +1252,8 @@ while modulo != "0":
                         input("Digite S para confirmar a exclusão: ").strip().upper()
                     )
                     if excluir == "S":
-                        del vendas[id_venda]
+                        vendas[id_venda][5] = False
+                        #del vendas[id_venda]
                         print()
                         print("--------------------------------")
                         print("|        VENDA EXCLUÍDA✅      |")
