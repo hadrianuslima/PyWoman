@@ -1,36 +1,7 @@
 def CRUD_produto():
     import pickle
     from validacoes import verificar_preco , verificar_letras , verificar_numeros , limpar_terminal
-
-    def recuperar_produtos():
-        try:
-            arq_produtos = open("produtos.dat", "rb")
-            produtos = pickle.load(arq_produtos)
-            arq_produtos.close()
-        except:
-            arq_produtos = open("produtos.dat", "wb")
-            produtos = {
-                "roupas": {
-                    "123": ["blusa", "M", "123", "preto", 50.00, True],
-                    "234": ["vestido", "P", "234", "azul", 70.00, True],
-                    "345": ["calça", "G", "345", "vermelho", 40.00, True],
-                    "456": ["sutiã", "M", "456", "preto", 30.00, True],
-                },
-                "cosmeticos": {
-                    "567": ["maquiagem", "567", 70.00, True],
-                    "678": ["perfume", "678", 80.00, True],
-                    "789": ["hidratante", "789", 65.00, True],
-                    "890": ["óleo corporal", "890", 30.50, True],
-                },
-                "acessorios": {
-                    "901": ["pulseira", "901", 38.90, True],
-                    "012": ["colar", "012", 79.99, True],
-                    "112": ["óculos", "112", 58.99, True],
-                },
-            }
-            pickle.dump(produtos, arq_produtos)
-            arq_produtos.close()
-        return produtos
+    from recup_dados import recuperar_produtos
     
     def gravar_produtos(produtos_loja):
         arq_produtos = open("produtos.dat", "wb")
