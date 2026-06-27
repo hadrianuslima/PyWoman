@@ -1,49 +1,8 @@
 def CRUD_cliente():
     import pickle
     from validacoes import validar_cpf , validar_data , verificar_letras , limpar_terminal, validar_fone
-    
-    def recuperar_clientes():
-        try:
-            arq_clientes = open("clientes.dat", "rb")
-            clientes = pickle.load(arq_clientes)
-            arq_clientes.close()
-        except:
-            arq_clientes = open("clientes.dat", "wb")
-            clientes = {
-                # [nome, telefone, cpf, data de nascimento, status de atividade]
-                "11111111111": [
-                    "Hadrianus da Silva Lima",
-                    "83999999999",
-                    "11111111111",
-                    "12/09/2006",
-                    True
-                ],
-                "22222222222": [
-                    "Valeria pereira de medeiros",
-                    "84988888888",
-                    "22222222222",
-                    "04/11/2005",
-                    True
-                ],
-                "33333333333": [
-                    "Marycele saraiva da silva",
-                    "83977777777",
-                    "33333333333",
-                    "24/10/1982",
-                    True
-                ],
-                "44444444444": [
-                    "Roberto alves de lima",
-                    "83966666666",
-                    "44444444444",
-                    "13/11/1982",
-                    True
-                ],
-            }
-            pickle.dump(clientes, arq_clientes)
-            arq_clientes.close()
-        return clientes
-    
+    from recup_dados import recuperar_clientes
+
     def gravar_clientes(clientes_loja):
         arq_clientes = open("clientes.dat", "wb")
         pickle.dump(clientes_loja, arq_clientes)
