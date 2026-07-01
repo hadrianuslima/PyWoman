@@ -21,7 +21,7 @@ def relatorios():
         print("|| 3- Lista de clientes           ||")
         print("|| 4- Produtos mais vendidos      ||")
         print("|| 5- Preferência de clientes     ||")
-        print(" \  0- Voltar                      /")
+        print("||  0- Voltar                      /")
         print("  --------------------------------")
         resp7 = input("Informe a opção desejada: ").strip()
         resp7_validas = ["0", "1", "2", "3", "4", "5"]
@@ -58,7 +58,33 @@ def relatorios():
                             print(f"ACESSÓRIO: {produtos['acessorios'][codigo][0]}")
                             print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                             print("\033[1;32m----------------------------------\033[m")
-            input("APERTE ENTER PARA PROSSEGUIR")                
+            input("APERTE ENTER PARA PROSSEGUIR")     
+        elif resp7 == "2":
+            limpar_terminal()
+            for id_venda in vendas:
+                if vendas[id_venda][5] ==  True:
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"NOME: {vendas[id_venda][0]}")
+                    print(f"CPF: {vendas[id_venda][1]}")
+                    print(f"DATA: {vendas[id_venda][2]}")
+                    print("PRODUTOS E QUANTIDADES:")
+                    for i in vendas[id_venda][3]:
+                        print("-", end=" ")
+                        print(f"{i}: {vendas[id_venda][3][i]}")
+                    print(f"PREÇO TOTAL: R${vendas[id_venda][4]}")
+                    print("\033[1;32m----------------------------------\033[m")
+            input("APERTE ENTER PARA PROSSEGUIR")
+        elif resp7 == "3":
+            limpar_terminal()
+            for cpf_cliente in clientes:
+                if clientes[cpf_cliente][4] == True:
+                    print("\033[1;32m----------------------------------\033[m")
+                    print(f"CPF: {clientes[cpf_cliente][2]}")
+                    print(f"NOME: {clientes[cpf_cliente][0]}")
+                    print(f"TELEFONE: {clientes[cpf_cliente][1]}")
+                    print(f"DATA DE NASCIMENTO: {clientes[cpf_cliente][3]}")
+                    print("\033[1;32m----------------------------------\033[m")
+            input("APERTE ENTER PARA PROSSEGUIR")
         else:
             print()
             print(rosa_inicio+"-----------------------------------"+rosa_final)
