@@ -18,7 +18,7 @@ while modulo != "0":
     print("|| 3- Vendas💵                ||")
     print("|| 4- Relatórios📄            ||")
     print("|| 5- Sobre o sistemaℹ️        ||")
-    print(" \  0- Sair🔙                 //")
+    print("||  0- Sair🔙                 //")
     print("  ---------------------------")
     modulo = input("Informe o módulo que deseja acessar: ").strip()
     modulos_validos = ["0", "1", "2", "3", "4", "5"]
