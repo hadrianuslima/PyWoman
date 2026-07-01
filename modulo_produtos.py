@@ -20,7 +20,7 @@ def CRUD_produto():
         print("|| 1- Roupas👗                ||")
         print("|| 2- Cosméticos💄            ||")
         print("|| 3- Acessórios👓            ||")
-        print(" \  0- Voltar 🔙               /")
+        print("||  0- Voltar 🔙               /")
         print("  ----------------------------")
         resp2 = input("Informe a opção que deseja: ").strip()
         resp2_validas = ["0", "1", "2", "3"]
@@ -39,7 +39,7 @@ def CRUD_produto():
             print("|| 2- Ver informações da peçaℹ️    ||")
             print("|| 3- Editar informações da peça🔁||")
             print("|| 4- Excluir peça🗑️               ||")
-            print(" \  0- Voltar🔙                    /")
+            print("||  0- Voltar🔙                    /")
             print("   ------------------------------")
             resp3 = input("Informe a opção que deseja: ").strip()
             resp3_validas = ["0", "1", "2", "3", "4"]
@@ -235,7 +235,7 @@ def CRUD_produto():
             print("|| 2- Dados do cosméticoℹ️         ||")
             print("|| 3- Editar dados do cosmético🔁 ||")
             print("|| 4- Excluir cosmético🗑️          ||")
-            print(" \  0- Voltar🔙                     / ")
+            print("||  0- Voltar🔙                     / ")
             print("  --------------------------------")
             resp4 = input("Informe a opção que deseja: ").strip()
             resp4_validas = ["0", "1", "2", "3", "4"]
@@ -410,7 +410,7 @@ def CRUD_produto():
             print("|| 2- Dados do acessórioℹ️        ||")
             print("|| 3- Editar dados do acessório🔁||")
             print("|| 4- Excluir acessório🗑️         ||")
-            print(" \  0- Voltar🔙                   /")
+            print("||  0- Voltar🔙                   /")
             print("  ------------------------------")
             resp5 = input("Informe a opção que deseja: ").strip()
             resp5_validas = ["0", "1", "2", "3", "4"]

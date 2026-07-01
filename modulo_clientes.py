@@ -21,7 +21,7 @@ def CRUD_cliente():
         print("|| 2- Ver dados do clienteℹ️   ||")
         print("|| 3- Atualizar dados🔁       ||")
         print("|| 4- Excluir cadastro 🗑️      ||")
-        print(" \  0- Voltar🔙                /")
+        print("||  0- Voltar🔙                /")
         print("  ----------------------------")
         resp1 = input("Informe a opção que deseja: ").strip()
         resp1_validas = ["0", "1", "2", "3", "4"]

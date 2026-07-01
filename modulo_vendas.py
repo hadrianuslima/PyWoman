@@ -24,7 +24,7 @@ def CRUD_vendas():
         print("|| 2- Visualizar vendasℹ️          ||")
         print("|| 3- Editar venda🔁              ||")
         print("|| 4- Excluir uma venda🗑️          ||")
-        print(" \  0- Voltar🔙                    /")
+        print("||  0- Voltar🔙                    /")
         print("  ---------------------------------")
         resp6 = input("Informe a opção desejada: ").strip()
         resp6_validas = ["0", "1", "2", "3", "4"]

@@ -11,6 +11,6 @@ def sobre_sistm():
     print("|| 1- hadrianus.lima.130@ufrn.edu.br     ||")
     print("||              LICENÇA MIT              ||")
     print("||  https://opensource.org/licenses/MIT  ||")
-    print(" \                                        /")
+    print("||                                        /")
     print("  ---------------------------------------")
     input("APERTE ENTER PARA PROSSEGUIR")
