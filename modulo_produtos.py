@@ -34,7 +34,6 @@ def CRUD_produto():
             print(rosa_inicio+"------------------------------------"+rosa_final)
             print(rosa_inicio+"|         ROUPAS FEMININA          |"+rosa_final)
             print(rosa_inicio+"------------------------------------"+rosa_final)
-            #titulo_menu_maior("ROUPAS FEMININAS")
             print("|| 1- Cadastrar peça de roupa✅   ||")
             print("|| 2- Ver informações da peçaℹ️    ||")
             print("|| 3- Editar informações da peça🔁||")

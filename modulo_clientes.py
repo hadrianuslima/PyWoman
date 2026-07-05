@@ -119,7 +119,6 @@ def CRUD_cliente():
             print(rosa_inicio+"--------------------------------"+rosa_final)
             print(rosa_inicio+"|       ATUALIZAR DADOS        |"+rosa_final)
             print(rosa_inicio+"--------------------------------"+rosa_final)
-            #titulo_menu_menor("ATUALIZAR DADOS")
             print()
             busca = input("NOME: ").strip().lower()
             while verificar_letras(busca) == False:
