@@ -32,15 +32,21 @@ def CRUD_vendas():
             resp6 = input("Informe uma opção válida: ").strip()
         if resp6 == "1":
             limpar_terminal()
-            print(rosa_inicio+"--------------------------------"+rosa_final)
-            print(rosa_inicio+"|       ADICIONAR VENDA        |"+rosa_final)
-            print(rosa_inicio+"--------------------------------"+rosa_final)
-            # titulo_menu_menor("ADICIONAR VENDA")
-            print()
-            id_venda = input("Informe o ID da venda: ").strip()
-            while verificar_numeros(id_venda) == False:
-                id_venda = input("APENAS NÚMEROS: ").strip()
-            if id_venda not in vendas:
+            print(rosa_inicio+"------------------------------------"+rosa_final)
+            print(rosa_inicio+"|          ADICIONAR VENDA         |"+rosa_final)
+            print(rosa_inicio+"------------------------------------"+rosa_final)
+            print("|| 1- Adicionar uma nova venda✅  ||")
+            print("|| 2- Reativar uma venda🔁        ||")
+            print("--------------------------------------")
+            opcao = input("Informe a opção desejada: ").strip()
+            while opcao != "1" and opcao != "2":
+                opcao = input("Informe a opção desejada: ").strip()
+            if opcao == "1":
+                limpar_terminal()
+                print(rosa_inicio+"------------------------------------"+rosa_final)
+                print(rosa_inicio+"|             NOVA VENDA           |"+rosa_final)
+                print(rosa_inicio+"------------------------------------"+rosa_final)
+                id_venda = int(next(reversed(vendas))) + 1
                 cpf_cliente = input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
                 while validar_cpf(cpf_cliente) == False:
                     cpf_cliente = input("Informe um CPF válido: ").strip()
@@ -73,7 +79,7 @@ def CRUD_vendas():
                         else:
                             index_preco = 2
                         preco += produtos[categoria][codigo][index_preco] * quantidade
-                        vendas[id_venda] = [
+                        vendas[str(id_venda)] = [
                             nome,
                             cpf_cliente,
                             dia_da_compra,
@@ -134,22 +140,28 @@ def CRUD_vendas():
                 else:
                     print("Esse cliente não está cadastrado no loja!")
                     print("Por favor realize o cadastro do cliente primeiro!")
-            elif (id_venda in vendas) and (vendas[id_venda][5] == False):
-                print("\033[1;32m----------------------------------\033[m")
-                print(f"NOME: {vendas[id_venda][0]}")
-                print(f"DATA DA VENDA: {vendas[id_venda][2]}")
-                print(f"ID DA VENDA: {id_venda}")
-                print("\033[1;32m----------------------------------\033[m")
-                reativacao = input("Deseja reativar essa venda? [S/N]: ").strip().upper()
-                if reativacao == "S":
-                    vendas[id_venda][5] = True
+            else:
+                limpar_terminal()
+                print(rosa_inicio+"------------------------------------"+rosa_final)
+                print(rosa_inicio+"|          REATIVAR VENDA          |"+rosa_final)
+                print(rosa_inicio+"------------------------------------"+rosa_final)
+                achou = ""
+                for id_venda in vendas:
+                    if vendas[id_venda][5] == False:
+                        achou = "S"
+                        print("\033[1;32m----------------------------------\033[m")
+                        print(f"NOME: {vendas[id_venda][0]}")
+                        print(f"DATA DA VENDA: {vendas[id_venda][2]}")
+                        print(f"ID DA VENDA: {id_venda}")
+                        print("\033[1;32m----------------------------------\033[m")
+                if achou != "S":
+                    print("Nenhuma venda desativada!")
+                else:
+                    reativacao = input("Informe o ID da venda que deseja reativar: ").strip()
+                    vendas[reativacao][5] = True
                     print("--------------------------------")
                     print("|       VENDA CADASTRADA✅    |")
                     print("--------------------------------")
-                else:
-                    print("Reativação cancelada!")
-            else:
-                print("Esse ID já está cadastrado!")
             print()
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp6 == "2":
