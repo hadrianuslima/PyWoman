@@ -50,6 +50,9 @@ def CRUD_vendas():
                 cpf_cliente = input("Informe o CPF de quem comprou o(s) produto(s): ").strip()
                 while validar_cpf(cpf_cliente) == False:
                     cpf_cliente = input("Informe um CPF válido: ").strip()
+                cpf_cliente = cpf_cliente.replace('.', '')
+                cpf_cliente = cpf_cliente.replace('-', '')
+                cpf_cliente = cpf_cliente.replace(' ', '')
                 if cpf_cliente in clientes:
                     nome = clientes[cpf_cliente][0]
                     dia_da_compra = input(
