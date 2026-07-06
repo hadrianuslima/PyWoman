@@ -211,7 +211,6 @@ def CRUD_produto():
                         )
                         if excluir == "S":
                             produtos["roupas"][codigo][5] = False
-                            #del produtos["roupas"][codigo]
                             print("--------------------------------")
                             print("|        PEÇA EXCLUÍDA✅        |")
                             print("--------------------------------")
@@ -386,7 +385,6 @@ def CRUD_produto():
                         print()
                         if excluir == "S":
                             produtos["cosmeticos"][codigo][3] = False
-                            #del produtos["cosmeticos"][codigo]
                             print("--------------------------------")
                             print("|      COSMÉTICO EXCLUÍDO✅    |")
                             print("--------------------------------")
@@ -562,7 +560,6 @@ def CRUD_produto():
                         )
                         if excluir == "S":
                             produtos["acessorios"][codigo][3] = False
-                            #del produtos["acessorios"][codigo]
                             print()
                             print("--------------------------------")
                             print("|      ACESSÓRIO EXCLUÍDO✅    |")

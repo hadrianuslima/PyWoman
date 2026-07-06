@@ -363,7 +363,6 @@ def CRUD_vendas():
                     )
                     if excluir == "S":
                         vendas[id_venda][5] = False
-                        #del vendas[id_venda]
                         print()
                         print("--------------------------------")
                         print("|        VENDA EXCLUÍDA✅      |")
