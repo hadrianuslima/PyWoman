@@ -1,5 +1,4 @@
-def relatorios():
-    import pickle
+def relatorios():   
     from recup_dados import recuperar_clientes,recuperar_produtos,recuperar_vendas
     from validacoes import limpar_terminal, verificar_letras, validar_cpf
 
@@ -165,7 +164,6 @@ def relatorios():
                             else:
                                 prefe_client[cod_produt] += vendas[id_venda][3][cod_produt]
                 prefe_client = dict(sorted(prefe_client.items(),key=lambda item: item[1], reverse=True))
-                #print(prefe_client)
                 limpar_terminal()
                 print(rosa_inicio+"------------------------------------"+rosa_final)
                 print(rosa_inicio+"|      PREFERÊNCIA DE CLIENTES     |"+rosa_final)
