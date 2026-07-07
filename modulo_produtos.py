@@ -53,7 +53,7 @@ def CRUD_produto():
                 codigo = input("Informe o código da peça: ").strip()
                 while verificar_numeros(codigo) == False:
                     codigo = input("APENAS NÚMEROS: ").strip()
-                if not (codigo in produtos["roupas"]):
+                if not (codigo in produtos["roupas"] or codigo in produtos["acessorios"] or codigo in produtos["cosmeticos"]):
                     tipo_peca = input("Informe o tipo de peça: ").strip()
                     while verificar_letras(tipo_peca) == False:
                         tipo_peca = input("SOMENTE LETRAS : ").strip()
@@ -248,7 +248,7 @@ def CRUD_produto():
                 codigo = input("Informe o código do cosmético: ").strip()
                 while verificar_numeros(codigo) == False:
                     codigo = input("APENAS NÚMEROS: ").strip()
-                if not (codigo in produtos["cosmeticos"]):
+                if not (codigo in produtos["roupas"] or codigo in produtos["acessorios"] or codigo in produtos["cosmeticos"]):
                     tipo_cosmetico = input("Informe o tipo do cosmético: ").strip()
                     while verificar_letras(tipo_cosmetico) == False:
                         tipo_cosmetico = input("SOMENTE LETRAS : ").strip()
@@ -422,7 +422,7 @@ def CRUD_produto():
                 codigo = input("Informe o código do acessório: ").strip()
                 while verificar_numeros(codigo) == False:
                     codigo = input("APENAS NÚMEROS: ").strip()
-                if not (codigo in produtos["acessorios"]):
+                if not (codigo in produtos["roupas"] or codigo in produtos["acessorios"] or codigo in produtos["cosmeticos"]):
                     tipo_acessorio = input("Informe o tipo do acessório: ").strip()
                     while verificar_letras(tipo_acessorio) == False:
                         tipo_acessorio = input("SOMENTE LETRAS : ").strip()
