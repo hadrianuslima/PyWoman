@@ -61,7 +61,7 @@ def CRUD_cliente():
                     cpf_cliente,
                     data_nasc,
                     True
-                ]  # Add cliente no dicionário de clientes
+                ]
                 print()
                 print("--------------------------------")
                 print("|      CLIENTE CADASTRADO ✅   |")
