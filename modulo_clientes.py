@@ -67,7 +67,6 @@ def CRUD_cliente():
                 print("|      CLIENTE CADASTRADO ✅   |")
                 print("--------------------------------")
                 print()
-                print(clientes)
             elif (cpf_cliente in clientes) and clientes[cpf_cliente][4] == False:
                 print("\033[1;32m----------------------------------\033[m")
                 print(f"CPF: {clientes[cpf_cliente][2]}")
@@ -161,7 +160,6 @@ def CRUD_cliente():
                     print("--------------------------------")
                     print("|      DADOS ATUALIZADOS✅     |")
                     print("--------------------------------")
-                    print(clientes)  # Verificação
                 else:
                     print("Esse CPF não está cadastrado!")
             print()
@@ -199,12 +197,10 @@ def CRUD_cliente():
                     )
                     if excluir == "S":
                         clientes[cpf_cliente][4] = False
-                        # del clientes[cpf_cliente]
                         print("--------------------------------")
                         print("|       CADASTRO EXCLUÍDO✅    |")
                         print("--------------------------------")
                         print()
-                        print(clientes)  # Verificação
                     else:
                         print("Exclusão cancelada!")
                 else:
