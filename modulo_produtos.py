@@ -77,7 +77,6 @@ def CRUD_produto():
                     print("|       PEÇA CADASTRADA✅      |")
                     print("--------------------------------")
                     print()
-                    print(produtos["roupas"])  # Verificação
                 elif (codigo in produtos["roupas"]) and (produtos["roupas"][codigo][5] == False):
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"CÓDIGO: {produtos['roupas'][codigo][2]}")
@@ -172,7 +171,6 @@ def CRUD_produto():
                         print("--------------------------------")
                         print("|       PEÇA ATUALIZADA✅      |")
                         print("--------------------------------")
-                        print(produtos["roupas"])  # Vericação
                     else:
                         print("Esse produto não está cadastrado!")
                 print()
@@ -215,7 +213,6 @@ def CRUD_produto():
                             print("|        PEÇA EXCLUÍDA✅        |")
                             print("--------------------------------")
                             print()
-                            print(produtos["roupas"])  # Verificação
                         else:
                             print("Exclusão cancelada!")
                     else:
@@ -261,7 +258,6 @@ def CRUD_produto():
                     print("|     COSMÉTICO CADASTRADO✅   |")
                     print("--------------------------------")
                     print()
-                    print(produtos["cosmeticos"])  # Vericação
                 elif (codigo in produtos["cosmeticos"]) and (produtos["cosmeticos"][codigo][3] == False):
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
@@ -274,7 +270,6 @@ def CRUD_produto():
                         print("--------------------------------")
                         print("|     COSMÉTICO CADASTRADO✅   |")
                         print("--------------------------------")
-                        print(produtos["cosmeticos"])
                     else:
                         print("Recadastro cancelado!")
                 else:
@@ -344,7 +339,6 @@ def CRUD_produto():
                         print("|       DADOS ATUALIZADOS✅    |")
                         print("--------------------------------")
                         print()
-                        print(produtos["cosmeticos"])  # Verificação
                     else:
                         print("Não existe produto cadastrado com esse código!")
                 print()
@@ -389,7 +383,6 @@ def CRUD_produto():
                             print("|      COSMÉTICO EXCLUÍDO✅    |")
                             print("--------------------------------")
                             print()
-                            print(produtos["cosmeticos"])  # Verificação
                         else:
                             print("Exclusão cancelada!")
                     else:
@@ -435,7 +428,6 @@ def CRUD_produto():
                     print("|     ACESSÓRIO CADASTRADO✅   |")
                     print("--------------------------------")
                     print()
-                    print(produtos["acessorios"])  # Verificação
                 elif (codigo in produtos["acessorios"]) and (produtos["acessorios"][codigo][3] == False):
                     print("\033[1;32m----------------------------------\033[m")
                     print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
@@ -518,7 +510,6 @@ def CRUD_produto():
                         print("|       DADOS ATUALIZADOS✅    |")
                         print("--------------------------------")
                         print()
-                        print(produtos["acessorios"])  # Verificação
                     else:
                         print("Esse código não está cadastrado!")
                 print()
@@ -565,7 +556,6 @@ def CRUD_produto():
                             print("|      ACESSÓRIO EXCLUÍDO✅    |")
                             print("--------------------------------")
                             print()
-                            print(produtos["acessorios"])  # Verificação
                         else:
                             print("Exclusão cancelada!")
                     else:
