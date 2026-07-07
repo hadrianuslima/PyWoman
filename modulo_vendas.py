@@ -137,7 +137,6 @@ def CRUD_vendas():
                         print("|       VENDA CADASTRADA✅    |")
                         print("--------------------------------")
                         print()
-                        print(vendas)  # Verificação
                     else:
                         print("Esse produto não existe na loja!")
                 else:
@@ -317,7 +316,6 @@ def CRUD_vendas():
                         print("|        VENDA EDITADA✅      |")
                         print("--------------------------------")
                         print()
-                        print(vendas)  # Verificação
                     else:
                         print("Produto não encontrado!")
                 else:
@@ -368,7 +366,6 @@ def CRUD_vendas():
                         print("|        VENDA EXCLUÍDA✅      |")
                         print("--------------------------------")
                         print()
-                        print(vendas)  # verificação
                     else:
                         print("Exclusão cancelada!")
                 else:
