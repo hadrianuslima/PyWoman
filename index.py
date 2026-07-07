@@ -1,4 +1,4 @@
-from validacoes import validar_cpf , validar_data , verificar_preco , verificar_letras , verificar_numeros , limpar_terminal, validar_fone
+from validacoes import limpar_terminal
 from modulo_clientes import CRUD_cliente
 from modulo_produtos import CRUD_produto
 from modulo_vendas import CRUD_vendas
