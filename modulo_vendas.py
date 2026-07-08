@@ -55,9 +55,7 @@ def CRUD_vendas():
                 cpf_cliente = cpf_cliente.replace(' ', '')
                 if cpf_cliente in clientes:
                     nome = clientes[cpf_cliente][0]
-                    dia_da_compra = input(
-                            "Informe a data da compra no formato DD/MM/AAAA: "
-                        ).strip()
+                    dia_da_compra = input("Informe a data da compra no formato DD/MM/AAAA: ").strip()
                     while validar_data(dia_da_compra) == False:
                         dia_da_compra = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
                     codigo = input("Informe o código do produto: ").strip()
@@ -71,9 +69,7 @@ def CRUD_vendas():
                             break
                     if achou == "S":
                         preco = 0
-                        quantidade = input(
-                                "Informe quantas unidades do produto foram compradas: "
-                            ).strip()
+                        quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
                         while verificar_numeros(quantidade) == False:
                             quantidade = input("APENAS NÚMEROS: ").strip()
                         quantidade = int(quantidade)
@@ -90,11 +86,7 @@ def CRUD_vendas():
                             preco,
                             True
                         ]
-                        parar = (
-                            input("Deseja adicionar outro produto? [S/N]: ")
-                            .strip()
-                            .upper()
-                        )
+                        parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                         while parar != "N":
                             codigo = input("Informe o código do produto: ").strip()
                             while verificar_numeros(codigo) == False:
@@ -106,9 +98,7 @@ def CRUD_vendas():
                                     categoria = setor
                                     break
                             if achou == "S":
-                                quantidade = input(
-                                        "Informe quantas unidades do produto foram compradas: "
-                                    ).strip()
+                                quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
                                 while verificar_numeros(quantidade) == False:
                                     quantidade = input("APENAS NÚMEROS: ").strip()
                                 quantidade = int(quantidade)
@@ -119,18 +109,10 @@ def CRUD_vendas():
                                 preco += produtos[categoria][codigo][index_preco] * quantidade
                                 vendas[id_venda][3][codigo] = quantidade
                                 vendas[id_venda][4] = preco
-                                parar = (
-                                    input("Deseja adicionar outro produto? [S/N]: ")
-                                    .strip()
-                                    .upper()
-                                )
+                                parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                             else:
                                 print("Esse produto não existe na loja!")
-                                parar = (
-                                    input("Deseja adicionar outro produto? [S/N]: ")
-                                    .strip()
-                                    .upper()
-                                )
+                                parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                         print(f"PREÇO TOTAL: R${preco}")
                         print()
                         print("--------------------------------")
@@ -160,10 +142,15 @@ def CRUD_vendas():
                     print("Nenhuma venda desativada!")
                 else:
                     reativacao = input("Informe o ID da venda que deseja reativar: ").strip()
-                    vendas[reativacao][5] = True
-                    print("--------------------------------")
-                    print("|       VENDA CADASTRADA✅    |")
-                    print("--------------------------------")
+                    while verificar_numeros(reativacao) == False:
+                        reativacao = input("Informe o ID de forma correta: ").strip()
+                    if reativacao in vendas and vendas[reativacao][5] == False:
+                        vendas[reativacao][5] = True
+                        print("--------------------------------")
+                        print("|       VENDA CADASTRADA✅    |")
+                        print("--------------------------------")
+                    else:
+                        print("O ID foi informado errado!")
             print()
             input("APERTE ENTER PARA PROSSEGUIR")
         elif resp6 == "2":
@@ -238,9 +225,7 @@ def CRUD_vendas():
                     print(f"PREÇO TOTAL: R${vendas[id_venda][4]}")
                     print()
                     preco = 0
-                    dia_da_compra = input(
-                        "Informe a data  CORRETA da compra no formato DD/MM/AAAA: "
-                    ).strip()
+                    dia_da_compra = input("Informe a data  CORRETA da compra no formato DD/MM/AAAA: ").strip()
                     while validar_data(dia_da_compra) == False:
                         dia_da_compra = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
                     codigo = input("Informe o código CORRETO do produto: ").strip()
@@ -253,9 +238,7 @@ def CRUD_vendas():
                             categoria = setor
                             break
                     if achou == "S":
-                        quantidade = input(
-                                "Informe quantas unidades do produto foram compradas: "
-                            ).strip()
+                        quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
                         while verificar_numeros(quantidade) == False:
                             quantidade = input("APENAS NÚMEROS: ").strip()
                         quantidade = int(quantidade)
@@ -272,9 +255,7 @@ def CRUD_vendas():
                             preco,
                             True
                         ]
-                        parar = (
-                            input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
-                        )
+                        parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                         while parar != "N":
                             codigo = input("Informe o código do produto: ").strip()
                             while verificar_numeros(codigo) == False:
@@ -286,9 +267,7 @@ def CRUD_vendas():
                                     categoria = setor
                                     break
                             if achou == "S":
-                                quantidade = input(
-                                        "Informe quantas unidades do produto foram compradas: "
-                                    ).strip()
+                                quantidade = input("Informe quantas unidades do produto foram compradas: ").strip()
                                 while verificar_numeros(quantidade) == False:
                                     quantidade = input("APENAS NÚMEROS: ").strip()
                                 quantidade = int(quantidade)
@@ -299,18 +278,10 @@ def CRUD_vendas():
                                 preco += produtos[categoria][codigo][index_preco] * quantidade
                                 vendas[id_venda][3][codigo] = int(quantidade)
                                 vendas[id_venda][4] = preco
-                                parar = (
-                                    input("Deseja adicionar outro produto? [S/N]: ")
-                                    .strip()
-                                    .upper()
-                                )
+                                parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                             else:
                                 print("Produto não encontrado!")
-                                parar = (
-                                    input("Deseja adicionar outro produto? [S/N]: ")
-                                    .strip()
-                                    .upper()
-                                )
+                                parar = input("Deseja adicionar outro produto? [S/N]: ").strip().upper()
                         print()
                         print("--------------------------------")
                         print("|        VENDA EDITADA✅      |")
@@ -356,9 +327,7 @@ def CRUD_vendas():
                         print("-", end=" ")
                         print(f"{i}: {vendas[id_venda][3][i]}")
                     print(f"PREÇO TOTAL: R${vendas[id_venda][4]}")
-                    excluir = (
-                        input("Digite S para confirmar a exclusão: ").strip().upper()
-                    )
+                    excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
                     if excluir == "S":
                         vendas[id_venda][5] = False
                         print()

@@ -51,10 +51,8 @@ def CRUD_cliente():
                 fone = fone.replace("(","")
                 fone = fone.replace(")","")
                 data_nasc = input("Informe a data de nascimento do cliente no formato DD/MM/AAAA: ").strip()
-
                 while validar_data(data_nasc) == False:
                     data_nasc = input("Informe a data válida no formato DD/MM/AAAA: ").strip()
-
                 clientes[cpf_cliente] = [
                     nome,
                     fone,
@@ -145,9 +143,7 @@ def CRUD_cliente():
                     nome = input("Informe o novo nome para o cliente: ").strip().capitalize()
                     while verificar_letras(nome) == False:
                         nome = input("Informe o nome CORRETO do cliente : ").strip().capitalize()
-                    data_nasc = input(
-                            "Informe a nova data de nascimento para cliente: "
-                        ).strip()
+                    data_nasc = input("Informe a nova data de nascimento para cliente: ").strip()
                     while validar_data(data_nasc) == False:
                         data_nasc = input("Informe a data correta no formato DD/MM/AAAA: ").strip()
                     fone = input("Informe o novo número telefone cliente: ").strip()
@@ -192,9 +188,7 @@ def CRUD_cliente():
                     print(f"CPF: {clientes[cpf_cliente][2]}")
                     print(f"TELEFONE: {clientes[cpf_cliente][1]}")
                     print(f"DATA DE NASCIMENTO: {clientes[cpf_cliente][3]}")
-                    excluir = (
-                        input("Digite S para excluir o cadastro: ").strip().upper()
-                    )
+                    excluir = input("Digite S para excluir o cadastro: ").strip().upper()
                     if excluir == "S":
                         clientes[cpf_cliente][4] = False
                         print("--------------------------------")

@@ -202,11 +202,7 @@ def CRUD_produto():
                         print(f"COR: {produtos['roupas'][codigo][3]}")
                         print(f"PREÇO: R${produtos['roupas'][codigo][4]}")
                         print()
-                        excluir = (
-                            input("Digite S para confirmar a exclusão: ")
-                            .strip()
-                            .upper()
-                        )
+                        excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
                         if excluir == "S":
                             produtos["roupas"][codigo][5] = False
                             print("--------------------------------")
@@ -371,11 +367,7 @@ def CRUD_produto():
                         print(f"TIPO: {produtos['cosmeticos'][codigo][0]}")
                         print(f"CÓDIGO: {produtos['cosmeticos'][codigo][1]}")
                         print(f"PREÇO: R${produtos['cosmeticos'][codigo][2]}")
-                        excluir = (
-                            input("Digite S para confirmar a exclusão: ")
-                            .strip()
-                            .upper()
-                        )
+                        excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
                         print()
                         if excluir == "S":
                             produtos["cosmeticos"][codigo][3] = False
@@ -544,11 +536,7 @@ def CRUD_produto():
                         print(f"CÓDIGO: {produtos['acessorios'][codigo][1]}")
                         print(f"PREÇO: R${produtos['acessorios'][codigo][2]}")
                         print()
-                        excluir = (
-                            input("Digite S para confirmar a exclusão: ")
-                            .strip()
-                            .upper()
-                        )
+                        excluir = input("Digite S para confirmar a exclusão: ").strip().upper()
                         if excluir == "S":
                             produtos["acessorios"][codigo][3] = False
                             print()
